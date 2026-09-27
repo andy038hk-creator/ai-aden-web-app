@@ -1,0 +1,230 @@
+/* Chenxiang: Split the Mountain — dark mythic palette */
+:root {
+  --ink: #0a0708;
+  --crimson: #8b1a1a;
+  --crimson-bright: #c42b2b;
+  --gold: #d4a017;
+  --gold-dim: #9a7510;
+  --jade: #2d8a6e;
+  --jade-bright: #3ecf9a;
+  --ink-soft: #1a1214;
+  --paper: #e8d5a3;
+  --paper-dim: #b8a070;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", Georgia, serif;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app {
+  position: relative;
+  width: 960px;
+  height: 640px;
+  max-width: 100vw;
+  max-height: 100vh;
+  box-shadow: 0 0 60px rgba(139, 26, 26, 0.35);
+  border: 1px solid var(--gold-dim);
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ink-soft);
+  cursor: crosshair;
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay.active { pointer-events: auto; }
+
+/* —— Screens —— */
+.screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(26,18,20,0.92) 0%, rgba(10,7,8,0.97) 100%);
+  padding: 2rem;
+  text-align: center;
+  animation: fadeIn 0.35s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.screen h1 {
+  font-size: 2.6rem;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 24px rgba(212, 160, 23, 0.4);
+  margin-bottom: 0.35rem;
+}
+
+.screen h1 .en {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--paper-dim);
+  letter-spacing: 0.08em;
+  font-weight: normal;
+  margin-top: 0.4rem;
+}
+
+.screen .subtitle {
+  color: var(--crimson-bright);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.1em;
+}
+
+.screen .hint {
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 1rem 0 1.5rem;
+  text-align: left;
+}
+
+.screen .hint kbd {
+  display: inline-block;
+  background: var(--ink-soft);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  padding: 0.1em 0.45em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.8em;
+  margin: 0 0.15em;
+}
+
+.btn {
+  pointer-events: auto;
+  background: linear-gradient(180deg, var(--crimson-bright), var(--crimson));
+  color: var(--paper);
+  border: 1px solid var(--gold);
+  padding: 0.75rem 2.2rem;
+  font-size: 1.1rem;
+  font-family: inherit;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 4px 16px rgba(196, 43, 43, 0.35);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(212, 160, 23, 0.4);
+}
+
+.btn:active { transform: translateY(0); }
+
+/* —— Reward cards —— */
+.reward-title {
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.12em;
+}
+
+.reward-sub {
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+  margin-bottom: 1.4rem;
+}
+
+.cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.card {
+  width: 200px;
+  min-height: 220px;
+  background: linear-gradient(160deg, #1e1416 0%, #120c0e 100%);
+  border: 1px solid var(--gold-dim);
+  border-radius: 4px;
+  padding: 1.1rem 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(212, 160, 23, 0.25);
+}
+
+.card .kind {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--jade-bright);
+}
+
+.card .kind.cast { color: var(--crimson-bright); }
+
+.card .name {
+  font-size: 1.25rem;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+}
+
+.card .en-name {
+  font-size: 0.75rem;
+  color: var(--paper-dim);
+}
+
+.card .desc {
+  font-size: 0.82rem;
+  color: var(--paper);
+  line-height: 1.45;
+  margin-top: 0.4rem;
+  flex: 1;
+}
+
+.card .tag {
+  font-size: 0.7rem;
+  color: var(--jade);
+  border-top: 1px solid rgba(154, 117, 16, 0.35);
+  padding-top: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+/* —— Result screens —— */
+.result-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.win h1 { color: var(--jade-bright); }
+.lose h1 { color: var(--crimson-bright); }
