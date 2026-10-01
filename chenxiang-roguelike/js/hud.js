@@ -106,9 +106,17 @@ export function drawPlayHUD(ctx, W, H, hud) {
     ctx.fillStyle = '#b8a070';
     ctx.font = '13px serif';
     ctx.fillText(hud.isBoss ? '強敵 · FOES' : '敵人 · ENEMIES', px + plateW / 2, 34);
-    ctx.fillStyle = '#f0d48a';
-    ctx.font = 'bold 28px serif';
-    ctx.fillText(String(hud.alive), px + plateW / 2, 66);
+    if (hud.alive === 0 && hud.wavePending) {
+      ctx.fillStyle = '#7dffc8';
+      ctx.font = 'bold 18px serif';
+      ctx.fillText('下一波', px + plateW / 2, 58);
+      ctx.font = '12px serif';
+      ctx.fillText('NEXT WAVE', px + plateW / 2, 76);
+    } else {
+      ctx.fillStyle = '#f0d48a';
+      ctx.font = 'bold 28px serif';
+      ctx.fillText(String(hud.alive), px + plateW / 2, 66);
+    }
   }
 
   ctx.fillStyle = hud.muted ? '#c42b2b' : 'rgba(184,160,112,0.85)';

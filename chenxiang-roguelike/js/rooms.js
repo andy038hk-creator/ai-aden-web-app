@@ -83,12 +83,12 @@ export function spawnEnemiesForRoom(room) {
     enemies.push(createMeleeSoldier(room.w / 2, 5.2, {
       trainer: true,
       hp: 1,
-      speed: 1.05,
-      damage: 1,
-      attackCd: 2.1,
-      attackCdMax: 2.8,
+      speed: 0.9,
+      damage: 0,
+      attackCd: 30,
+      attackCdMax: 30,
       attackRange: 0.78,
-      windupMax: 0.45,
+      windupMax: 0,
     }));
     return enemies;
   }
@@ -123,19 +123,19 @@ export function spawnRoom1Extra(room, kind, avoid = []) {
   const y = spot.y + 0.5;
   if (kind === 'ranged') {
     return createRangedSoldier(x, y, {
-      speed: 1.3,
-      attackCd: 1.8,
-      attackCdMax: 2.6,
-      preferDist: 5.3,
-      shotSpeed: 3.7,
+      speed: 1.2,
+      attackCd: 2.3,
+      attackCdMax: 3.0,
+      preferDist: 5.4,
+      shotSpeed: 3.1,
     });
   }
   return createMeleeSoldier(x, y, {
     hp: 2,
-    speed: 1.8,
-    attackCd: 0.9,
-    attackCdMax: 1.75,
-    windupMax: 0.36,
+    speed: 1.55,
+    attackCd: 1.15,
+    attackCdMax: 2.05,
+    windupMax: 0.42,
   });
 }
 

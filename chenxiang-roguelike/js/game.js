@@ -263,7 +263,7 @@ export class Game {
     // Knockback, dash, then walk
     if (p.kb > 0) {
       tryMove(p, p.kx * dt, p.ky * dt, this.room);
-      p.kb -= dt;
+      p.kb = Math.max(0, p.kb - dt);
     } else if (p.dashTimer > 0) {
       p.dashTimer -= dt;
       tryMove(p, p.dashVel.x * dt, p.dashVel.y * dt, this.room);
@@ -346,7 +346,7 @@ export class Game {
     if (this.room.intro) {
       this.introT += dt;
       const trainerUp = this.enemies.some((e) => e.alive && e.trainer);
-      const release = (!trainerUp && this.introT >= 2.4) || this.introT >= 7.5;
+      const release = (!trainerUp && this.introT >= 3.0) || this.introT >= 7.5;
       if (release) this.releaseIntro(trainerUp);
     } else if (this.hintFade > 0) {
       this.hintFade = Math.max(0, this.hintFade - dt);
@@ -362,12 +362,24 @@ export class Game {
     }
   }
 
-  /** End the Room 1 drill. Melee follows only if the dummy is already down. Archer is always late. */
+  /** End the Room 1 drill. One melee threat, then a late archer — never both at the opening. */
   releaseIntro(trainerStillAlive) {
     this.room.intro = false;
     this.hintFade = 1.15;
-    if (!trainerStillAlive) this.spawnQueue.push({ t: 0.85, kind: 'melee' });
-    this.spawnQueue.push({ t: 5.0, kind: 'ranged' });
+    if (trainerStillAlive) {
+      const t = this.enemies.find((e) => e.alive && e.trainer);
+      if (t) {
+        t.trainer = false;
+        t.damage = 1;
+        t.speed = 1.55;
+        t.attackCd = 1.2;
+        t.attackCdMax = 2.05;
+        t.windupMax = 0.42;
+      }
+    } else {
+      this.spawnQueue.push({ t: 0.9, kind: 'melee' });
+    }
+    this.spawnQueue.push({ t: 8.0, kind: 'ranged' });
   }
 
   flushSfx() {
@@ -405,7 +417,7 @@ export class Game {
       e.hitFlash = Math.max(0, (e.hitFlash || 0) - dt);
       if (e.kb > 0) {
         tryMove(e, e.kx * dt, e.ky * dt, this.room);
-        e.kb -= dt;
+        e.kb = Math.max(0, e.kb - dt);
       }
       if (!e.alive) continue;
       e.attackCd = Math.max(0, e.attackCd - dt);
@@ -417,7 +429,7 @@ export class Game {
           e.winding -= dt;
           if (e.winding <= 0) {
             e.winding = 0;
-            if (d < e.attackRange + 0.22) {
+            if (e.damage > 0 && d < e.attackRange + 0.22) {
               damagePlayer(p, e.damage, this.vfx, this.hurtSource(e, kind), this.feel);
             }
             e.attackCd = e.attackCdMax;
@@ -430,8 +442,10 @@ export class Game {
         } else if (e.attackCd <= 0) {
           if (e.windupMax > 0) {
             e.winding = e.windupMax;
-          } else {
+          } else if (e.damage > 0) {
             damagePlayer(p, e.damage, this.vfx, this.hurtSource(e, kind), this.feel);
+            e.attackCd = e.attackCdMax;
+          } else {
             e.attackCd = e.attackCdMax;
           }
         }
@@ -631,11 +645,12 @@ export class Game {
     });
 
     const hintA = this.room.intro ? 1 : (this.hintFade > 0 ? this.hintFade / 1.15 : 0);
-    if (hintA > 0 && this.room.intro && this.mouse.seen) {
+    const drillUp = !!(this.room.intro && this.enemies.some((e) => e.alive && e.trainer));
+    if (hintA > 0 && drillUp && this.mouse.seen) {
       const ps = worldToScreen(p.x, p.y);
       drawAimGuide(ctx, ox + ps.x, oy + ps.y - 16, this.mouse.x, this.mouse.y, hintA);
     }
-    drawIntroHint(ctx, W, H, hintA, this.room.intro ? 'aim' : 'next');
+    drawIntroHint(ctx, W, H, hintA, drillUp ? 'aim' : 'next');
     this.drawHUD(ctx);
   }
 
@@ -1019,6 +1034,7 @@ export class Game {
       roomIndex: this.roomIndex,
       totalRooms: TOTAL_COMBAT_ROOMS,
       alive: this.aliveEnemies().length,
+      wavePending: !!(this.room.intro || this.spawnQueue.length),
       exitOpen: this.room.exitOpen,
       hp: p.hp,
       maxHp: p.maxHp,
