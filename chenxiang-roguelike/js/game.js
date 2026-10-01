@@ -3,11 +3,13 @@
  * States: title | playing | reward | paused | win | lose
  */
 import { worldToScreen, screenToWorld, TILE_W, TILE_H, dist, normalize, clamp } from './iso.js';
-import { createPlayer, createProjectile, createVfx, moveToward, moveAway } from './entities.js';
-import { startMelee, resolveMelee, castLantern, damagePlayer, damageEntity, updateProjectiles, updateFlames } from './combat.js';
-import { makeRoom, spawnEnemiesForRoom, tryMove, isBlocked } from './rooms.js';
+import { createPlayer, createProjectile, createVfx } from './entities.js';
+import { startMelee, resolveMelee, castLantern, damagePlayer, updateProjectiles, updateFlames } from './combat.js';
+import { makeRoom, spawnEnemiesForRoom, spawnRoom1Extra, tryMove } from './rooms.js';
 import { rollRewardChoices } from './baxian.js';
 import { UI } from './ui.js';
+import { createSfx } from './audio.js';
+import { drawPlayHUD, drawIntroHint, drawAimGuide, drawHurtOverlay } from './hud.js';
 
 const TOTAL_COMBAT_ROOMS = 2; // then boss = room 3
 
@@ -22,6 +24,31 @@ export class Game {
     this.mouse = { x: 0, y: 0, downL: false, downR: false, worldX: 0, worldY: 0 };
 
     this.ui = new UI(overlay, (type, payload) => this.onUI(type, payload));
+    this.sfx = createSfx();
+    this._sfxQ = new Set();
+    this.hitStop = 0;
+    this.shake = 0;
+    this.introT = 0;
+    this.hintFade = 0;
+    this.spawnQueue = [];
+    this.feel = {
+      note: (kind) => {
+        this._sfxQ.add(kind);
+        if (kind === 'hurt') {
+          this.hitStop = Math.max(this.hitStop, 0.05);
+          this.shake = Math.max(this.shake, 8);
+        } else if (kind === 'kill') {
+          this.hitStop = Math.max(this.hitStop, 0.072);
+          this.shake = Math.max(this.shake, 6);
+        } else if (kind === 'hit') {
+          this.hitStop = Math.max(this.hitStop, 0.042);
+          this.shake = Math.max(this.shake, 3.6);
+        }
+      },
+      hitStop: (s) => {
+        this.hitStop = Math.max(this.hitStop, s);
+      },
+    };
     this.state = 'title';
     this.player = null;
     this.room = null;
@@ -40,6 +67,11 @@ export class Game {
   }
 
   onUI(type, payload) {
+    this.sfx.unlock().then(() => {
+      if (type === 'start' || type === 'restart' || type === 'pickBoon' || type === 'resume') {
+        this.sfx.ui();
+      }
+    });
     if (type === 'start' || type === 'restart') this.startRun();
     else if (type === 'pickBoon') this.applyBoon(payload);
     else if (type === 'resume') this.resume();
@@ -65,7 +97,12 @@ export class Game {
     this.roomIndex = index;
     this.player.x = this.room.playerSpawn.x;
     this.player.y = this.room.playerSpawn.y;
-    this.player.iframe = 0.4;
+    this.player.iframe = index === 0 ? 0.9 : 0.4;
+    this.introT = 0;
+    this.hintFade = 0;
+    this.spawnQueue = [];
+    this.hitStop = 0;
+    this.shake = 0;
     this.enemies = spawnEnemiesForRoom(this.room);
     this.projectiles = [];
     this.flames = [];
@@ -103,6 +140,8 @@ export class Game {
     const mapKey = (e, down) => {
       const k = e.key.toLowerCase();
       this.keys[k] = down;
+      if (down) this.sfx.unlock();
+      if (down && k === 'm' && !e.repeat) this.sfx.toggleMute();
       if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' ', 'j', 'k', 'f'].includes(k)) {
         e.preventDefault();
       }
@@ -120,6 +159,7 @@ export class Game {
 
     this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     this.canvas.addEventListener('mousedown', (e) => {
+      this.sfx.unlock();
       if (this.state !== 'playing') return;
       if (e.button === 0) {
         this.mouse.downL = true;
@@ -140,6 +180,7 @@ export class Game {
       const scaleY = this.H / rect.height;
       this.mouse.x = (e.clientX - rect.left) * scaleX;
       this.mouse.y = (e.clientY - rect.top) * scaleY;
+      this.mouse.seen = true;
     });
   }
 
@@ -147,6 +188,7 @@ export class Game {
     if (!this.player || !this.player.alive) return;
     this._aimFromMouse();
     if (startMelee(this.player)) {
+      this.sfx.axe();
       this.meleeResolved = false;
       this.vfx.push(createVfx('swing', this.player.x, this.player.y, this.player.meleeDuration, {
         facing: { ...this.player.facing },
@@ -159,7 +201,9 @@ export class Game {
   tryCast() {
     if (!this.player || !this.player.alive) return;
     this._aimFromMouse();
-    castLantern(this.player, this.aliveEnemies(), this.projectiles, this.flames, this.vfx);
+    if (castLantern(this.player, this.aliveEnemies(), this.projectiles, this.flames, this.vfx, this.feel)) {
+      this.sfx.lantern();
+    }
   }
 
   _aimFromMouse() {
@@ -189,10 +233,18 @@ export class Game {
   }
 
   update(dt) {
+    this.flushSfx();
+    if (this.shake > 0) this.shake = Math.max(0, this.shake - dt * 36);
+    // Hit-stop freezes the sim; particles still play so the impact reads.
+    if (this.hitStop > 0) {
+      this.hitStop = Math.max(0, this.hitStop - dt);
+      this.decayVfx(dt);
+      return;
+    }
+
     const p = this.player;
     if (!p.alive) {
-      this.state = 'lose';
-      this.ui.showLose();
+      this.finishLose();
       return;
     }
 
@@ -200,13 +252,19 @@ export class Game {
     p.meleeCd = Math.max(0, p.meleeCd - dt);
     p.lanternCd = Math.max(0, p.lanternCd - dt);
     p.iframe = Math.max(0, p.iframe - dt);
-    if (p.hitFlash) p.hitFlash = Math.max(0, (p.hitFlash || 0) - dt);
+    if (p.hitFlash) p.hitFlash = Math.max(0, p.hitFlash - dt);
+    if (p.hurtT) p.hurtT = Math.max(0, p.hurtT - dt);
+
+    this.tickIntro(dt);
 
     // Aim
     this._aimFromMouse();
 
-    // Dash override
-    if (p.dashTimer > 0) {
+    // Knockback, dash, then walk
+    if (p.kb > 0) {
+      tryMove(p, p.kx * dt, p.ky * dt, this.room);
+      p.kb -= dt;
+    } else if (p.dashTimer > 0) {
       p.dashTimer -= dt;
       tryMove(p, p.dashVel.x * dt, p.dashVel.y * dt, this.room);
     } else {
@@ -228,8 +286,7 @@ export class Game {
     if (p.meleeActive > 0) {
       p.meleeActive -= dt;
       if (!this.meleeResolved && p.meleeActive <= p.meleeDuration * 0.55) {
-        resolveMelee(p, this.enemies, this.vfx);
-        // Also hit dog if separate — already in enemies list
+        resolveMelee(p, this.enemies, this.vfx, this.feel);
         this.meleeResolved = true;
       }
       if (p.meleeActive < 0) p.meleeActive = 0;
@@ -239,22 +296,21 @@ export class Game {
     this.updateEnemies(dt);
 
     // Projectiles & flames
-    updateProjectiles(this.projectiles, p, this.enemies, this.vfx, dt);
+    updateProjectiles(this.projectiles, p, this.enemies, this.vfx, dt, this.feel);
     updateFlames(this.flames, this.enemies, this.vfx, dt);
 
-    // VFX
-    for (const v of this.vfx) {
-      v.life -= dt;
-      if (v.life <= 0) v.alive = false;
-    }
+    this.flushSfx();
+    if (!p.alive) return;
+
+    this.decayVfx(dt);
     this.projectiles = this.projectiles.filter((x) => x.alive);
     this.flames = this.flames.filter((x) => x.alive);
-    this.vfx = this.vfx.filter((x) => x.alive);
-    // Keep dead enemies briefly? filter only when room clear check needs alive
+    this.enemies = this.enemies.filter((e) => e.alive || e.dying > 0);
 
-    // Room clear
+    // Room clear — hold the exit while the Room 1 drill or its delayed spawns are pending
     const living = this.aliveEnemies();
-    if (!this.room.cleared && living.length === 0) {
+    const wavePending = this.room.intro || this.spawnQueue.length > 0;
+    if (!this.room.cleared && living.length === 0 && !wavePending) {
       this.room.cleared = true;
       this.room.exitOpen = true;
       this.vfx.push(createVfx('exitOpen', this.room.exit.x + 0.5, this.room.exit.y + 0.5, 0.8));
@@ -267,6 +323,7 @@ export class Game {
       if (dist(p, { x: ex, y: ey }) < 0.85) {
         if (this.room.isBoss) {
           this.state = 'win';
+          this.sfx.win();
           this.ui.showWin();
           return;
         }
@@ -284,35 +341,120 @@ export class Game {
     this.camera.y += (scr.y - this.camera.y) * Math.min(1, 8 * dt);
   }
 
+  tickIntro(dt) {
+    if (!this.room || this.room.isBoss || this.room.index !== 0) return;
+    if (this.room.intro) {
+      this.introT += dt;
+      const trainerUp = this.enemies.some((e) => e.alive && e.trainer);
+      const release = (!trainerUp && this.introT >= 2.4) || this.introT >= 7.5;
+      if (release) this.releaseIntro(trainerUp);
+    } else if (this.hintFade > 0) {
+      this.hintFade = Math.max(0, this.hintFade - dt);
+    }
+
+    for (const q of this.spawnQueue) q.t -= dt;
+    const due = this.spawnQueue.filter((q) => q.t <= 0);
+    this.spawnQueue = this.spawnQueue.filter((q) => q.t > 0);
+    for (const q of due) {
+      const e = spawnRoom1Extra(this.room, q.kind, this.enemies);
+      this.enemies.push(e);
+      this.vfx.push(createVfx('burst', e.x, e.y, 0.35, { color: '#d4a017', r: 0.9 }));
+    }
+  }
+
+  /** End the Room 1 drill. Melee follows only if the dummy is already down. Archer is always late. */
+  releaseIntro(trainerStillAlive) {
+    this.room.intro = false;
+    this.hintFade = 1.15;
+    if (!trainerStillAlive) this.spawnQueue.push({ t: 0.85, kind: 'melee' });
+    this.spawnQueue.push({ t: 5.0, kind: 'ranged' });
+  }
+
+  flushSfx() {
+    for (const k of this._sfxQ) {
+      if (k === 'hit') this.sfx.hit();
+      else if (k === 'kill') this.sfx.enemyDie();
+      else if (k === 'hurt') this.sfx.hurt();
+    }
+    this._sfxQ.clear();
+  }
+
+  decayVfx(dt) {
+    for (const v of this.vfx) {
+      v.life -= dt;
+      if (v.life <= 0) v.alive = false;
+    }
+    this.vfx = this.vfx.filter((x) => x.alive);
+  }
+
+  finishLose() {
+    if (this.state === 'lose') return;
+    this.state = 'lose';
+    this.sfx.playerDown();
+    this.ui.showLose(this.player && this.player.lastHit);
+  }
+
+  hurtSource(e, kind) {
+    return { name: e.name, en: e.en || '', kind, x: e.x, y: e.y };
+  }
+
   updateEnemies(dt) {
     const p = this.player;
     for (const e of this.enemies) {
-      if (!e.alive) continue;
+      if (e.dying > 0) e.dying = Math.max(0, e.dying - dt);
       e.hitFlash = Math.max(0, (e.hitFlash || 0) - dt);
+      if (e.kb > 0) {
+        tryMove(e, e.kx * dt, e.ky * dt, this.room);
+        e.kb -= dt;
+      }
+      if (!e.alive) continue;
       e.attackCd = Math.max(0, e.attackCd - dt);
 
       if (e.type === 'melee' || e.type === 'dog') {
         const d = dist(e, p);
-        if (d > e.attackRange) {
+        const kind = e.type === 'dog' ? 'bite' : 'melee';
+        if (e.winding > 0) {
+          e.winding -= dt;
+          if (e.winding <= 0) {
+            e.winding = 0;
+            if (d < e.attackRange + 0.22) {
+              damagePlayer(p, e.damage, this.vfx, this.hurtSource(e, kind), this.feel);
+            }
+            e.attackCd = e.attackCdMax;
+          }
+        } else if (e.kb > 0) {
+          // slide plays out before the next step
+        } else if (d > e.attackRange) {
           const n = normalize(p.x - e.x, p.y - e.y);
           tryMove(e, n.x * e.speed * dt, n.y * e.speed * dt, this.room);
         } else if (e.attackCd <= 0) {
-          damagePlayer(p, e.damage, this.vfx);
-          e.attackCd = e.attackCdMax;
+          if (e.windupMax > 0) {
+            e.winding = e.windupMax;
+          } else {
+            damagePlayer(p, e.damage, this.vfx, this.hurtSource(e, kind), this.feel);
+            e.attackCd = e.attackCdMax;
+          }
         }
       } else if (e.type === 'ranged') {
         const d = dist(e, p);
-        if (d < e.preferDist - 1) {
+        if (e.kb <= 0 && d < e.preferDist - 1) {
           const n = normalize(e.x - p.x, e.y - p.y);
           tryMove(e, n.x * e.speed * dt, n.y * e.speed * dt, this.room);
-        } else if (d > e.preferDist + 1) {
+        } else if (e.kb <= 0 && d > e.preferDist + 1) {
           const n = normalize(p.x - e.x, p.y - e.y);
           tryMove(e, n.x * e.speed * 0.7 * dt, n.y * e.speed * 0.7 * dt, this.room);
         }
         if (e.attackCd <= 0 && d < 9) {
           const n = normalize(p.x - e.x, p.y - e.y);
+          const spd = e.shotSpeed || 5.5;
           this.projectiles.push(
-            createProjectile(e.x, e.y, n.x * 5.5, n.y * 5.5, e.damage, 'enemy', '#d4a017', 2.2, 0.16)
+            createProjectile(e.x, e.y, n.x * spd, n.y * spd, e.damage, 'enemy', '#d4a017', 2.2, 0.16, {
+              name: e.name,
+              en: e.en,
+              kind: 'arrow',
+              x: e.x,
+              y: e.y,
+            })
           );
           e.attackCd = e.attackCdMax;
         }
@@ -347,7 +489,8 @@ export class Game {
             createProjectile(
               boss.x, boss.y,
               Math.cos(a) * 6, Math.sin(a) * 6,
-              1, 'enemy', '#c42b2b', 2.5, 0.2
+              1, 'enemy', '#c42b2b', 2.5, 0.2,
+              { name: boss.name, en: boss.en, kind: 'spear', x: boss.x, y: boss.y }
             )
           );
         }
@@ -364,7 +507,8 @@ export class Game {
             createProjectile(
               boss.x, boss.y,
               Math.cos(a) * 4.5, Math.sin(a) * 4.5,
-              1, 'enemy', '#d4a017', 2.0, 0.18
+              1, 'enemy', '#d4a017', 2.0, 0.18,
+              { name: boss.name, en: boss.en, kind: 'ring', x: boss.x, y: boss.y }
             )
           );
         }
@@ -375,7 +519,9 @@ export class Game {
       boss._slam -= dt;
       if (boss._slam <= 0) {
         boss._slam = null;
-        if (dist(boss, p) < 2.4) damagePlayer(p, 1, this.vfx);
+        if (dist(boss, p) < 2.4) {
+          damagePlayer(p, 1, this.vfx, this.hurtSource(boss, 'slam'), this.feel);
+        }
         // Leap closer
         const n = normalize(p.x - boss.x, p.y - boss.y);
         tryMove(boss, n.x * 1.8, n.y * 1.8, this.room);
@@ -385,7 +531,7 @@ export class Game {
 
     // Contact damage
     if (dist(boss, p) < boss.radius + p.radius + 0.1 && boss.attackCd <= 0) {
-      damagePlayer(p, 1, this.vfx);
+      damagePlayer(p, 1, this.vfx, this.hurtSource(boss, 'strike'), this.feel);
       boss.attackCd = 0.8;
     }
     boss.attackCd = Math.max(0, boss.attackCd - dt);
@@ -406,8 +552,10 @@ export class Game {
 
     if (!this.room || !this.player) return;
 
-    const ox = W / 2 - this.camera.x;
-    const oy = H / 2 - this.camera.y + 40;
+    const shx = this.shake ? (Math.random() - 0.5) * this.shake : 0;
+    const shy = this.shake ? (Math.random() - 0.5) * this.shake : 0;
+    const ox = W / 2 - this.camera.x + shx;
+    const oy = H / 2 - this.camera.y + 40 + shy;
 
     // Collect drawables for depth sort (by wx+wy)
     const drawList = [];
@@ -437,17 +585,18 @@ export class Game {
     }
 
     // Entities
-    if (this.player.alive) {
+    if (this.player.alive || this.hitStop > 0) {
       drawList.push({ depth: this.player.x + this.player.y, kind: 'player', e: this.player });
     }
     for (const e of this.enemies) {
-      if (!e.alive) continue;
+      if (!e.alive && !(e.dying > 0)) continue;
       drawList.push({ depth: e.x + e.y, kind: 'enemy', e });
     }
     for (const p of this.projectiles) {
       drawList.push({ depth: p.x + p.y + 10, kind: 'proj', e: p });
     }
     for (const v of this.vfx) {
+      if (v.kind === 'dmg') continue;
       drawList.push({ depth: v.x + v.y + 20, kind: 'vfx', e: v });
     }
 
@@ -463,6 +612,30 @@ export class Game {
       else if (d.kind === 'vfx') this.drawVfx(ctx, d.e, ox, oy);
     }
 
+    for (const v of this.vfx) {
+      if (v.kind === 'dmg') this.drawVfx(ctx, v, ox, oy);
+    }
+
+    const p = this.player;
+    let angle = null;
+    if (p.hurtT > 0 && p.hurtFrom) {
+      const rel = worldToScreen(p.hurtFrom.x - p.x, p.hurtFrom.y - p.y);
+      if (Math.hypot(rel.x, rel.y) > 2) angle = Math.atan2(rel.y, rel.x);
+    }
+    drawHurtOverlay(ctx, W, H, {
+      hp: p.hp,
+      maxHp: p.maxHp,
+      hurtT: p.hurtT || 0,
+      angle,
+      label: p.hurtLabel || '',
+    });
+
+    const hintA = this.room.intro ? 1 : (this.hintFade > 0 ? this.hintFade / 1.15 : 0);
+    if (hintA > 0 && this.room.intro && this.mouse.seen) {
+      const ps = worldToScreen(p.x, p.y);
+      drawAimGuide(ctx, ox + ps.x, oy + ps.y - 16, this.mouse.x, this.mouse.y, hintA);
+    }
+    drawIntroHint(ctx, W, H, hintA, this.room.intro ? 'aim' : 'next');
     this.drawHUD(ctx);
   }
 
@@ -542,7 +715,8 @@ export class Game {
     const { x, y } = worldToScreen(p.x, p.y);
     const cx = ox + x;
     const cy = oy + y;
-    const flash = p.iframe > 0 && Math.floor(performance.now() / 60) % 2 === 0;
+    const iframeBlink = p.iframe > 0 && Math.floor(performance.now() / 60) % 2 === 0;
+    const flash = iframeBlink || p.hitFlash > 0;
 
     // Shadow
     ctx.fillStyle = 'rgba(0,0,0,0.35)';
@@ -551,7 +725,7 @@ export class Game {
     ctx.fill();
 
     // Body
-    ctx.fillStyle = flash ? 'rgba(232,213,163,0.5)' : '#8b1a1a';
+    ctx.fillStyle = p.hitFlash > 0 ? '#fff6e4' : (flash ? 'rgba(232,213,163,0.5)' : '#8b1a1a');
     ctx.beginPath();
     ctx.ellipse(cx, cy - 10, 11, 16, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -561,7 +735,7 @@ export class Game {
     ctx.fillRect(cx - 8, cy - 26, 16, 4);
 
     // Head
-    ctx.fillStyle = flash ? '#e8d5a3' : '#c4a070';
+    ctx.fillStyle = p.hitFlash > 0 ? '#fff6e4' : (flash ? '#e8d5a3' : '#c4a070');
     ctx.beginPath();
     ctx.arc(cx, cy - 28, 8, 0, Math.PI * 2);
     ctx.fill();
@@ -619,11 +793,34 @@ export class Game {
     const cx = ox + x;
     const cy = oy + y;
     const flash = e.hitFlash > 0;
+    const dying = !e.alive && e.dying > 0;
+    const deathT = dying ? 1 - e.dying / (e.deathDur || 0.55) : 0;
+
+    ctx.save();
+    if (dying) ctx.globalAlpha = Math.max(0, 1 - deathT);
 
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
     ctx.beginPath();
     ctx.ellipse(cx, cy + 3, e.type === 'boss' ? 22 : 12, e.type === 'boss' ? 11 : 6, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    if (e.winding > 0 && e.windupMax) {
+      const charge = 1 - e.winding / e.windupMax;
+      ctx.save();
+      ctx.globalAlpha = (dying ? ctx.globalAlpha : 1) * (0.35 + 0.45 * charge);
+      ctx.strokeStyle = '#ff4a4a';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy + 2, 16 + charge * 14, 8 + charge * 6, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const pop = 1 + (e.hitFlash || 0) * 2.1 + (dying ? deathT * 0.55 : 0);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(pop, pop);
+    ctx.translate(-cx, -cy);
 
     if (e.type === 'boss') {
       ctx.fillStyle = flash ? '#e8d5a3' : e.color;
@@ -677,6 +874,28 @@ export class Game {
       }
       this.drawBar(ctx, cx - 12, cy - 36, 24, 3, e.hp / e.maxHp, '#c42b2b', '#3a1010');
     }
+
+    if (flash) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(0.85, e.hitFlash * 4.5);
+      ctx.fillStyle = '#fff8ea';
+      const rw = e.type === 'boss' ? 22 : e.type === 'dog' ? 16 : 12;
+      const rh = e.type === 'boss' ? 30 : e.type === 'dog' ? 12 : 16;
+      const ry = e.type === 'boss' ? 18 : e.type === 'dog' ? 6 : 10;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy - ry, rw, rh, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore(); // pop scale
+
+    if (e.trainer && e.alive) {
+      ctx.fillStyle = '#f0d48a';
+      ctx.font = '12px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('弱 · weak', cx, cy - 44);
+    }
+    ctx.restore(); // death alpha
   }
 
   drawProj(ctx, p, ox, oy) {
@@ -726,7 +945,28 @@ export class Game {
       ctx.beginPath();
       ctx.ellipse(cx, cy, r, r * 0.5, 0, 0, Math.PI * 2);
       ctx.stroke();
-    } else if (v.kind === 'hit' || v.kind === 'hurt' || v.kind === 'death') {
+    } else if (v.kind === 'death') {
+      ctx.globalAlpha = 1 - t;
+      ctx.strokeStyle = v.color || '#d4a017';
+      ctx.lineWidth = 3;
+      const ring = (v.r || 1) * (12 + t * 34);
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, ring, ring * 0.5, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = '#fff1c9';
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + t * 2;
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(a) * ring * 0.75, cy - 6 + Math.sin(a) * ring * 0.38, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (v.kind === 'dmg') {
+      ctx.globalAlpha = Math.min(1, (1 - t) * 1.35);
+      ctx.fillStyle = v.color || '#fff6df';
+      ctx.font = v.big ? 'bold 20px serif' : 'bold 16px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(v.text, cx, cy - 28 - t * 34);
+    } else if (v.kind === 'hit' || v.kind === 'hurt') {
       ctx.globalAlpha = 1 - t;
       ctx.fillStyle = v.color || '#c42b2b';
       ctx.beginPath();
@@ -768,65 +1008,24 @@ export class Game {
 
   drawHUD(ctx) {
     const p = this.player;
-    const pad = 16;
-
-    // Room label
-    ctx.fillStyle = '#d4a017';
-    ctx.font = '14px "Noto Serif SC", serif';
-    ctx.textAlign = 'left';
-    const progress = this.room.isBoss
-      ? 'BOSS'
-      : `Room ${this.roomIndex + 1}/${TOTAL_COMBAT_ROOMS}`;
-    ctx.fillText(`${this.room.label}  ·  ${progress}`, pad, pad + 12);
-
-    // HP hearts
-    ctx.font = '16px serif';
-    let hpStr = '';
-    for (let i = 0; i < p.maxHp; i++) hpStr += i < p.hp ? '♥' : '♡';
-    ctx.fillStyle = '#c42b2b';
-    ctx.fillText(hpStr, pad, pad + 36);
-
-    // Lantern CD bar
-    const cdPct = 1 - p.lanternCd / p.lanternCdMax;
-    ctx.fillStyle = '#e8d5a3';
-    ctx.font = '12px serif';
-    ctx.fillText('寶蓮燈', pad, pad + 58);
-    this.drawBar(ctx, pad + 52, pad + 48, 100, 10, cdPct, cdPct >= 1 ? '#3ecf9a' : '#2d8a6e', '#1a1214');
-    if (cdPct >= 1) {
-      ctx.fillStyle = '#3ecf9a';
-      ctx.fillText('READY', pad + 160, pad + 58);
-    }
-
-    // Boons
-    if (p.boons.length) {
-      ctx.fillStyle = '#9a7510';
-      ctx.font = '11px serif';
-      ctx.fillText('八仙: ' + p.boons.map((id) => {
-        const b = UI.getBoon(id);
-        return b ? b.name : id;
-      }).join(' · '), pad, pad + 78);
-    }
-
-    // Controls hint (bottom)
-    ctx.fillStyle = 'rgba(184,160,112,0.7)';
-    ctx.font = '11px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(
-      'WASD move · J/LMB axe · K/F/RMB 寶蓮燈 · ESC pause',
-      this.W / 2,
-      this.H - 12
-    );
-
-    // Enemy count
-    const alive = this.aliveEnemies().length;
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#e8d5a3';
-    ctx.font = '12px serif';
-    if (this.room.exitOpen) {
-      ctx.fillStyle = '#3ecf9a';
-      ctx.fillText('→ Reach the exit', this.W - pad, pad + 12);
-    } else {
-      ctx.fillText(`天兵 ${alive}`, this.W - pad, pad + 12);
-    }
+    const boons = p.boons.map((id) => {
+      const b = UI.getBoon(id);
+      if (!b) return null;
+      return { glyph: b.glyph || b.name.slice(0, 1), kind: b.kind, name: b.name };
+    }).filter(Boolean);
+    drawPlayHUD(ctx, this.W, this.H, {
+      label: this.room.label,
+      isBoss: this.room.isBoss,
+      roomIndex: this.roomIndex,
+      totalRooms: TOTAL_COMBAT_ROOMS,
+      alive: this.aliveEnemies().length,
+      exitOpen: this.room.exitOpen,
+      hp: p.hp,
+      maxHp: p.maxHp,
+      lanternCd: p.lanternCd,
+      lanternCdMax: p.lanternCdMax,
+      boons,
+      muted: this.sfx.muted,
+    });
   }
 }

@@ -5,6 +5,7 @@
 export const BAXIANS = [
   {
     id: 'tieguaili',
+    glyph: '鐵',
     name: '鐵拐李',
     en: 'Iron-Crutch Li',
     kind: 'passive',
@@ -17,6 +18,7 @@ export const BAXIANS = [
   },
   {
     id: 'ludongbin',
+    glyph: '呂',
     name: '呂洞賓',
     en: 'Lü Dongbin',
     kind: 'passive',
@@ -28,6 +30,7 @@ export const BAXIANS = [
   },
   {
     id: 'hexiangu',
+    glyph: '何',
     name: '何仙姑',
     en: 'He Xiangu',
     kind: 'passive',
@@ -39,6 +42,7 @@ export const BAXIANS = [
   },
   {
     id: 'hanxiangzi',
+    glyph: '韓',
     name: '韓湘子',
     en: 'Han Xiangzi',
     kind: 'passive',
@@ -50,6 +54,7 @@ export const BAXIANS = [
   },
   {
     id: 'caoguojiu',
+    glyph: '曹',
     name: '曹國舅',
     en: 'Cao Guojiu',
     kind: 'cast',
@@ -61,6 +66,7 @@ export const BAXIANS = [
   },
   {
     id: 'lancaihe',
+    glyph: '藍',
     name: '藍采和',
     en: 'Lan Caihe',
     kind: 'cast',
@@ -72,6 +78,7 @@ export const BAXIANS = [
   },
   {
     id: 'zhangguolao',
+    glyph: '張',
     name: '張果老',
     en: 'Zhang Guolao',
     kind: 'cast',
@@ -83,6 +90,7 @@ export const BAXIANS = [
   },
   {
     id: 'hanzhongli',
+    glyph: '鍾',
     name: '漢鍾離',
     en: 'Han Zhongli',
     kind: 'cast',
