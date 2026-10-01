@@ -63,6 +63,12 @@ export function makeRoom(index, isBoss = false) {
   };
 }
 
+/**
+ * Room 1 (index 0) opens as a drill: one weak soldier only.
+ * Reinforcements arrive later via spawnRoom1Extra — one slower melee,
+ * then a delayed archer — so the player is never boxed in by three foes.
+ * Later rooms keep the original counts.
+ */
 export function spawnEnemiesForRoom(room) {
   const enemies = [];
   if (room.isBoss) {
@@ -72,12 +78,25 @@ export function spawnEnemiesForRoom(room) {
     return enemies;
   }
 
-  const meleeCount = 2 + room.index;       // 2, 3, ...
-  const rangedCount = 1 + Math.floor(room.index / 1); // 1, 2, ...
+  if (room.index === 0) {
+    room.intro = true;
+    enemies.push(createMeleeSoldier(room.w / 2, 5.2, {
+      trainer: true,
+      hp: 1,
+      speed: 0.9,
+      damage: 0,
+      attackCd: 30,
+      attackCdMax: 30,
+      attackRange: 0.78,
+      windupMax: 0,
+    }));
+    return enemies;
+  }
 
-  const spots = openSpots(room).filter(
-    (s) => Math.hypot(s.x - room.playerSpawn.x, s.y - room.playerSpawn.y) > 3.5
-  );
+  const meleeCount = 2 + room.index; // room index 1 → 3 melee
+  const rangedCount = 1 + room.index; // room index 1 → 2 archers
+
+  const spots = farSpots(room, 3.5);
   shuffle(spots);
 
   let si = 0;
@@ -88,6 +107,42 @@ export function spawnEnemiesForRoom(room) {
     enemies.push(createRangedSoldier(spots[si].x + 0.5, spots[si].y + 0.5));
   }
   return enemies;
+}
+
+/** One softened Room 1 reinforcement. `kind` is 'melee' or 'ranged'. */
+export function spawnRoom1Extra(room, kind, avoid = []) {
+  const spots = farSpots(room, 3.1).filter((s) => {
+    const x = s.x + 0.5;
+    const y = s.y + 0.5;
+    return !avoid.some((e) => (e.alive || e.dying > 0) && Math.hypot(x - e.x, y - e.y) < 1.5);
+  });
+  shuffle(spots);
+  const fallback = openSpots(room);
+  const spot = spots[0] || fallback[fallback.length - 1] || { x: 5, y: 6 };
+  const x = spot.x + 0.5;
+  const y = spot.y + 0.5;
+  if (kind === 'ranged') {
+    return createRangedSoldier(x, y, {
+      speed: 1.2,
+      attackCd: 2.3,
+      attackCdMax: 3.0,
+      preferDist: 5.4,
+      shotSpeed: 3.1,
+    });
+  }
+  return createMeleeSoldier(x, y, {
+    hp: 2,
+    speed: 1.55,
+    attackCd: 1.15,
+    attackCdMax: 2.05,
+    windupMax: 0.42,
+  });
+}
+
+function farSpots(room, minDist) {
+  return openSpots(room).filter(
+    (s) => Math.hypot(s.x + 0.5 - room.playerSpawn.x, s.y + 0.5 - room.playerSpawn.y) > minDist
+  );
 }
 
 function openSpots(room) {

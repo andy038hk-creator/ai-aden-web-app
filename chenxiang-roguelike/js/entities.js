@@ -38,46 +38,70 @@ export function createPlayer(x, y) {
     },
     boons: [], // ids
     alive: true,
+    hitFlash: 0,
+    kb: 0,
+    kx: 0,
+    ky: 0,
+    hurtT: 0,
+    hurtFrom: null,
+    hurtLabel: '',
+    lastHit: null,
   };
 }
 
-export function createMeleeSoldier(x, y) {
+export function createMeleeSoldier(x, y, opts = {}) {
+  const hp = opts.hp ?? 3;
   return {
     type: 'melee',
-    name: '天兵',
+    name: opts.name || '天兵',
+    en: opts.en || 'Heavenly Soldier',
     x, y,
     radius: 0.32,
-    maxHp: 3,
-    hp: 3,
-    speed: 2.4,
-    damage: 1,
-    attackCd: 0,
-    attackCdMax: 1.1,
-    attackRange: 0.85,
-    color: '#6a3038',
+    maxHp: hp,
+    hp,
+    speed: opts.speed ?? 2.4,
+    damage: opts.damage ?? 1,
+    attackCd: opts.attackCd ?? 0,
+    attackCdMax: opts.attackCdMax ?? 1.1,
+    attackRange: opts.attackRange ?? 0.85,
+    windupMax: opts.windupMax ?? 0,
+    winding: 0,
+    trainer: !!opts.trainer,
+    color: opts.trainer ? '#5c4048' : '#6a3038',
     accent: '#c42b2b',
     alive: true,
     hitFlash: 0,
+    kb: 0,
+    kx: 0,
+    ky: 0,
+    dying: 0,
   };
 }
 
-export function createRangedSoldier(x, y) {
+export function createRangedSoldier(x, y, opts = {}) {
+  const hp = opts.hp ?? 2;
   return {
     type: 'ranged',
-    name: '天弓',
+    name: opts.name || '天弓',
+    en: opts.en || 'Sky Archer',
     x, y,
     radius: 0.3,
-    maxHp: 2,
-    hp: 2,
-    speed: 1.6,
-    damage: 1,
-    attackCd: 0.5 + Math.random(),
-    attackCdMax: 1.8,
-    preferDist: 4.5,
+    maxHp: hp,
+    hp,
+    speed: opts.speed ?? 1.6,
+    damage: opts.damage ?? 1,
+    attackCd: opts.attackCd ?? (0.5 + Math.random()),
+    attackCdMax: opts.attackCdMax ?? 1.8,
+    preferDist: opts.preferDist ?? 4.5,
+    shotSpeed: opts.shotSpeed ?? 5.5,
     color: '#3a4a6a',
     accent: '#d4a017',
     alive: true,
     hitFlash: 0,
+    kb: 0,
+    kx: 0,
+    ky: 0,
+    dying: 0,
   };
 }
 
@@ -85,6 +109,7 @@ export function createErlang(x, y) {
   return {
     type: 'boss',
     name: '二郎神',
+    en: 'Erlang Shen',
     x, y,
     radius: 0.55,
     maxHp: 28,
@@ -99,6 +124,10 @@ export function createErlang(x, y) {
     accent: '#d4a017',
     alive: true,
     hitFlash: 0,
+    kb: 0,
+    kx: 0,
+    ky: 0,
+    dying: 0,
     dog: createDog(x + 1.2, y + 0.4),
   };
 }
@@ -107,6 +136,7 @@ function createDog(x, y) {
   return {
     type: 'dog',
     name: '哮天犬',
+    en: 'Howling Celestial Dog',
     x, y,
     radius: 0.28,
     maxHp: 8,
@@ -120,10 +150,14 @@ function createDog(x, y) {
     accent: '#8b1a1a',
     alive: true,
     hitFlash: 0,
+    kb: 0,
+    kx: 0,
+    ky: 0,
+    dying: 0,
   };
 }
 
-export function createProjectile(x, y, vx, vy, damage, owner, color, life = 2.5, radius = 0.18) {
+export function createProjectile(x, y, vx, vy, damage, owner, color, life = 2.5, radius = 0.18, source = null) {
   return {
     type: 'projectile',
     x, y, vx, vy,
@@ -132,6 +166,7 @@ export function createProjectile(x, y, vx, vy, damage, owner, color, life = 2.5,
     color,
     life,
     radius,
+    source,
     alive: true,
   };
 }

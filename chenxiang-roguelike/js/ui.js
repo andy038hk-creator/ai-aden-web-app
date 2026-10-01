@@ -3,6 +3,16 @@
  */
 import { BAXIANS } from './baxian.js';
 
+const HIT_KIND = {
+  melee: '近戰 · melee',
+  arrow: '箭矢 · arrow',
+  bite: '撲咬 · bite',
+  slam: '震地 · slam',
+  spear: '三尖槍 · spear',
+  strike: '近身 · strike',
+  ring: '槍環 · ring',
+};
+
 export class UI {
   constructor(overlayEl, onEvent) {
     this.el = overlayEl;
@@ -21,8 +31,9 @@ export class UI {
         <h1>沉香：劈山<span class="en">Chenxiang: Split the Mountain</span></h1>
         <p class="subtitle">寶蓮燈 · 八仙 · 二郎神</p>
         <div class="hint">
-          <div><kbd>WASD</kbd> / <kbd>↑↓←→</kbd> Move</div>
-          <div><kbd>Space</kbd> / <kbd>J</kbd> / <kbd>LMB</kbd> Axe melee</div>
+          <div><kbd>WASD</kbd> / <kbd>↑↓←→</kbd> Move 移動</div>
+          <div><kbd>Mouse</kbd> 滑鼠瞄準 · aims axe & lantern</div>
+          <div><kbd>Space</kbd> / <kbd>J</kbd> / <kbd>LMB</kbd> Axe melee 揮斧</div>
           <div><kbd>K</kbd> / <kbd>F</kbd> / <kbd>RMB</kbd> 寶蓮燈 cast</div>
           <div><kbd>Esc</kbd> Pause</div>
           <div style="margin-top:0.6rem;color:var(--jade-bright)">Clear rooms · claim 八仙 boons · face 二郎神</div>
@@ -73,13 +84,18 @@ export class UI {
     this.el.querySelector('#btn-restart').onclick = () => this.onEvent('restart');
   }
 
-  showLose() {
+  showLose(lastHit) {
     this.el.classList.add('active');
+    const kind = lastHit && HIT_KIND[lastHit.kind] ? HIT_KIND[lastHit.kind] : (lastHit && lastHit.kind) || '';
+    const cause = lastHit && lastHit.name
+      ? `<p class="last-hit">最後一擊 · Last hit<br>${lastHit.name}${lastHit.en ? ` · ${lastHit.en}` : ''}${kind ? `<span class="kind">${kind}</span>` : ''}</p>`
+      : '';
     this.el.innerHTML = `
       <div class="screen lose">
         <div class="result-icon">⚔</div>
         <h1>隕落<span class="en">Fallen on the Path</span></h1>
         <p class="subtitle">天兵不退 — the lantern dims</p>
+        ${cause}
         <button class="btn" id="btn-restart">重 來 · Restart</button>
       </div>
     `;
@@ -92,7 +108,7 @@ export class UI {
       <div class="screen">
         <h1>暫 停<span class="en">Paused</span></h1>
         <div class="hint">
-          <div><kbd>WASD</kbd> Move · <kbd>J</kbd>/<kbd>LMB</kbd> Melee · <kbd>K</kbd>/<kbd>RMB</kbd> Lantern</div>
+          <div><kbd>Mouse</kbd> 滑鼠瞄準 aims · <kbd>WASD</kbd> Move · <kbd>J</kbd>/<kbd>LMB</kbd> Melee · <kbd>K</kbd>/<kbd>RMB</kbd> Lantern</div>
           <div><kbd>Esc</kbd> Resume</div>
         </div>
         <button class="btn" id="btn-resume">繼 續 · Resume</button>

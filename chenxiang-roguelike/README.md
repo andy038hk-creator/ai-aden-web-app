@@ -1,6 +1,6 @@
 # 沉香：劈山 — Chenxiang: Split the Mountain
 
-Version: v0.1.0
+Version: v0.2.0
 
 Hades-like isometric roguelike prototype set in Chinese mythology: **沉香 (Chenxiang)** saving his mother from **二郎神 (Erlang Shen)**, aided by the **八仙 (Eight Immortals)**. Mixed melee (axe) + cast (**寶蓮燈** lotus lantern).
 
@@ -24,9 +24,11 @@ Alternatives: `npx serve` or any static file server from this folder.
 | Action | Keys |
 |--------|------|
 | Move | `WASD` or Arrow keys |
+| Aim | Mouse — axe and lantern face the cursor 滑鼠瞄準 |
 | Axe melee | `Space` / `J` / Left mouse |
 | 寶蓮燈 cast | `K` / `F` / Right mouse |
 | Pause | `Esc` |
+| Mute | `M` |
 
 Desktop keyboard/mouse first. Touch is a later pass.
 
@@ -68,7 +70,7 @@ chenxiang-roguelike/
 
 ## What works / known limits
 
-**Works:** title → rooms → reward UI → boss → win/lose → restart; melee + lantern; 8 Baxian; HUD; pause.
+**Works:** title → rooms → reward UI → boss → win/lose → restart; melee + lantern; 8 Baxian; HUD; pause. v0.2 adds a Room 1 aim drill, lighter opening fight, hit-stop / damage numbers / knockback, hurt direction + low-HP vignette, last-hit line, procedural SFX, and a larger HUD (hearts, lantern READY, enemy count, Baxian icons).
 
 **Limits / next**
 
@@ -77,7 +79,7 @@ chenxiang-roguelike/
 - No narrative beats / dialogue yet  
 - Boon shop depth & stacking balance TBD  
 - Touch / gamepad later  
-- No audio yet  
+- Audio is procedural beeps, not scored music  
 
 ## Theme one-liner
 

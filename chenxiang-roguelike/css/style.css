@@ -228,3 +228,18 @@ html, body {
 
 .win h1 { color: var(--jade-bright); }
 .lose h1 { color: var(--crimson-bright); }
+
+.last-hit {
+  color: var(--gold);
+  margin: 0.35rem 0 1rem;
+  letter-spacing: 0.06em;
+  line-height: 1.55;
+  font-size: 1rem;
+}
+
+.last-hit .kind {
+  display: block;
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
