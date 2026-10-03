@@ -2,7 +2,7 @@
  * Combat: melee arc, lantern cast, damage application.
  * `feel` is an optional juice bus: { note(kind), hitStop(seconds) }.
  */
-import { dist, normalize } from './iso.js';
+import { dist, groundDir, groundDirFromAngle, groundVelocity, integrateGround } from './iso.js';
 import { createProjectile, createFlame, createVfx } from './entities.js';
 
 /** Start a melee swing. Facing should already be set. */
@@ -53,7 +53,7 @@ export function resolveMelee(player, enemies, vfx, feel) {
     while (diff < -Math.PI) diff += Math.PI * 2;
     if (Math.abs(diff) <= half) {
       damageEntity(e, player.meleeDamage, vfx, {
-        dir: normalize(e.x - player.x, e.y - player.y),
+        dir: groundDir(e.x - player.x, e.y - player.y) || { x: 1, y: 0 },
         feel,
         mag: 9,
       });
@@ -68,15 +68,14 @@ export function castLantern(player, enemies, projectiles, flames, vfx, feel) {
   if (player.lanternCd > 0) return false;
   player.lanternCd = player.lanternCdMax;
 
-  // Radial burst — 8 bolts outward
+  // Radial burst — 8 bolts on the ground plane (projects to an iso ellipse)
   const bolts = 8;
   for (let i = 0; i < bolts; i++) {
-    const a = (i / bolts) * Math.PI * 2;
-    const n = { x: Math.cos(a), y: Math.sin(a) };
+    const vel = groundVelocity(groundDirFromAngle((i / bolts) * Math.PI * 2), 6.5);
     projectiles.push(
       createProjectile(
         player.x, player.y,
-        n.x * 6.5, n.y * 6.5,
+        vel.x, vel.y,
         player.lanternDamage,
         'player',
         '#3ecf9a',
@@ -86,12 +85,13 @@ export function castLantern(player, enemies, projectiles, flames, vfx, feel) {
     );
   }
 
-  // Also a directed stronger beam toward facing
+  // Also a directed stronger beam toward facing (ground space, same as mouse aim)
   const f = player.facing;
+  const beam = groundVelocity(f, 9);
   projectiles.push(
     createProjectile(
       player.x, player.y,
-      f.x * 9, f.y * 9,
+      beam.x, beam.y,
       player.lanternDamage * 1.4,
       'player',
       '#d4a017',
@@ -111,7 +111,7 @@ export function castLantern(player, enemies, projectiles, flames, vfx, feel) {
   }
   if (player.flags.castDash) {
     player.dashTimer = 0.18;
-    player.dashVel = { x: f.x * 14, y: f.y * 14 };
+    player.dashVel = groundVelocity(f, 14);
     player.iframe = Math.max(player.iframe, 0.28);
   }
 
@@ -120,7 +120,7 @@ export function castLantern(player, enemies, projectiles, flames, vfx, feel) {
     if (!e.alive) continue;
     if (dist(player, e) <= player.lanternRange * 0.55 + e.radius) {
       damageEntity(e, player.lanternDamage * 0.6, vfx, {
-        dir: normalize(e.x - player.x, e.y - player.y),
+        dir: groundDir(e.x - player.x, e.y - player.y) || { x: 1, y: 0 },
         feel,
         mag: 6,
       });
@@ -136,8 +136,9 @@ export function damageEntity(e, amount, vfx, hit) {
   e.hitFlash = killed ? 0.22 : 0.16;
   if (hit?.dir && !hit.quiet) {
     const mag = (hit.mag ?? 7) * (killed ? 1.35 : 1);
-    e.kx = hit.dir.x * mag;
-    e.ky = hit.dir.y * mag;
+    const kb = groundVelocity(hit.dir, mag);
+    e.kx = kb.x;
+    e.ky = kb.y;
     e.kb = killed ? 0.16 : 0.12;
   }
   if (vfx) {
@@ -177,9 +178,10 @@ export function damagePlayer(player, amount, vfx, source, feel) {
   player.hurtLabel = hurtLabel(source);
   if (source && source.x != null) {
     player.hurtFrom = { x: source.x, y: source.y };
-    const n = normalize(player.x - source.x, player.y - source.y);
-    player.kx = n.x * 6.5;
-    player.ky = n.y * 6.5;
+    const n = groundDir(player.x - source.x, player.y - source.y) || { x: 0, y: -1 };
+    const kb = groundVelocity(n, 6.5);
+    player.kx = kb.x;
+    player.ky = kb.y;
     player.kb = 0.1;
   }
   if (source && source.name) {
@@ -212,8 +214,9 @@ export function damagePlayer(player, amount, vfx, source, feel) {
 export function updateProjectiles(projectiles, player, enemies, vfx, dt, feel) {
   for (const p of projectiles) {
     if (!p.alive) continue;
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
+    const step = integrateGround(p.vx, p.vy, dt);
+    p.x += step.x;
+    p.y += step.y;
     p.life -= dt;
     if (p.life <= 0) {
       p.alive = false;
@@ -235,7 +238,7 @@ export function updateProjectiles(projectiles, player, enemies, vfx, dt, feel) {
       for (const e of enemies) {
         if (!e.alive) continue;
         if (dist(p, e) < p.radius + e.radius) {
-          const dir = normalize(p.vx, p.vy);
+          const dir = groundDir(p.vx, p.vy) || { x: 1, y: 0 };
           damageEntity(e, p.damage, vfx, { dir, feel, mag: 5.5 });
           p.alive = false;
           break;

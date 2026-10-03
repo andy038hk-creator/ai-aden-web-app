@@ -1,7 +1,7 @@
 /**
  * Entities: player (沉香), enemies (天兵), boss (二郎神), projectiles, VFX.
  */
-import { dist, normalize, clamp } from './iso.js';
+import { clamp, groundDir, groundVelocity } from './iso.js';
 
 export function createPlayer(x, y) {
   return {
@@ -195,16 +195,16 @@ export function clampToRoom(e, room) {
   e.y = clamp(e.y, m, room.h - m);
 }
 
-/** Simple steering toward a target. */
+/** Steer toward a target on the isometric ground (tiles / second). */
 export function moveToward(e, tx, ty, dt, speedMul = 1) {
-  const n = normalize(tx - e.x, ty - e.y);
-  e.x += n.x * e.speed * speedMul * dt;
-  e.y += n.y * e.speed * speedMul * dt;
+  const n = groundDir(tx - e.x, ty - e.y);
+  if (!n) return { x: 0, y: 0 };
+  const step = groundVelocity(n, e.speed * speedMul * dt);
+  e.x += step.x;
+  e.y += step.y;
   return n;
 }
 
 export function moveAway(e, tx, ty, dt, speedMul = 1) {
   return moveToward(e, e.x - (tx - e.x), e.y - (ty - e.y), dt, speedMul);
 }
-
-export { dist, normalize };
