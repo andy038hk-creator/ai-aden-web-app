@@ -2,7 +2,10 @@
  * Game state machine + update/render loop.
  * States: title | playing | reward | paused | win | lose
  */
-import { worldToScreen, screenToWorld, TILE_W, TILE_H, dist, normalize, clamp } from './iso.js';
+import {
+  worldToScreen, TILE_W, TILE_H, dist, clamp,
+  groundDir, groundDirFromKeys, groundDirFromAngle, groundAim, groundVelocity, integrateGround,
+} from './iso.js';
 import { createPlayer, createProjectile, createVfx } from './entities.js';
 import { startMelee, resolveMelee, castLantern, damagePlayer, updateProjectiles, updateFlames } from './combat.js';
 import { makeRoom, spawnEnemiesForRoom, spawnRoom1Extra, tryMove } from './rooms.js';
@@ -210,9 +213,8 @@ export class Game {
     const p = this.player;
     const ox = this.W / 2 - this.camera.x;
     const oy = this.H / 2 - this.camera.y + 40;
-    const wx = screenToWorld(this.mouse.x - ox, this.mouse.y - oy);
-    const n = normalize(wx.x - p.x, wx.y - p.y);
-    if (Math.hypot(n.x, n.y) > 0.01) p.facing = n;
+    const n = groundAim(p.x, p.y, this.mouse.x - ox, this.mouse.y - oy);
+    if (n) p.facing = n;
   }
 
   aliveEnemies() {
@@ -260,24 +262,27 @@ export class Game {
     // Aim
     this._aimFromMouse();
 
-    // Knockback, dash, then walk
+    // Knockback, dash, then walk — all in ground space (diamond edges).
     if (p.kb > 0) {
-      tryMove(p, p.kx * dt, p.ky * dt, this.room);
+      const step = integrateGround(p.kx, p.ky, dt);
+      tryMove(p, step.x, step.y, this.room);
       p.kb = Math.max(0, p.kb - dt);
     } else if (p.dashTimer > 0) {
       p.dashTimer -= dt;
-      tryMove(p, p.dashVel.x * dt, p.dashVel.y * dt, this.room);
+      const step = integrateGround(p.dashVel.x, p.dashVel.y, dt);
+      tryMove(p, step.x, step.y, this.room);
     } else {
-      // WASD / arrows → isometric screen directions mapped to world
-      // W = up-screen (-wx,-wy), S = down, A = left-screen, D = right-screen
-      let mx = 0, my = 0;
-      if (this.keys['w'] || this.keys['arrowup']) { mx -= 1; my -= 1; }
-      if (this.keys['s'] || this.keys['arrowdown']) { mx += 1; my += 1; }
-      if (this.keys['a'] || this.keys['arrowleft']) { mx += 1; my -= 1; }
-      if (this.keys['d'] || this.keys['arrowright']) { mx -= 1; my += 1; }
-      if (mx || my) {
-        const n = normalize(mx, my);
-        tryMove(p, n.x * p.speed * dt, n.y * p.speed * dt, this.room);
+      // W/Up = −Y (NE edge), S/Down = +Y (SW edge),
+      // A/Left = −X (NW edge), D/Right = +X (SE edge).
+      const n = groundDirFromKeys({
+        north: this.keys['w'] || this.keys['arrowup'],
+        south: this.keys['s'] || this.keys['arrowdown'],
+        west: this.keys['a'] || this.keys['arrowleft'],
+        east: this.keys['d'] || this.keys['arrowright'],
+      });
+      if (n) {
+        const step = groundVelocity(n, p.speed * dt);
+        tryMove(p, step.x, step.y, this.room);
         if (p.meleeActive <= 0) p.facing = n;
       }
     }
@@ -416,7 +421,8 @@ export class Game {
       if (e.dying > 0) e.dying = Math.max(0, e.dying - dt);
       e.hitFlash = Math.max(0, (e.hitFlash || 0) - dt);
       if (e.kb > 0) {
-        tryMove(e, e.kx * dt, e.ky * dt, this.room);
+        const step = integrateGround(e.kx, e.ky, dt);
+        tryMove(e, step.x, step.y, this.room);
         e.kb = Math.max(0, e.kb - dt);
       }
       if (!e.alive) continue;
@@ -437,8 +443,11 @@ export class Game {
         } else if (e.kb > 0) {
           // slide plays out before the next step
         } else if (d > e.attackRange) {
-          const n = normalize(p.x - e.x, p.y - e.y);
-          tryMove(e, n.x * e.speed * dt, n.y * e.speed * dt, this.room);
+          const n = groundDir(p.x - e.x, p.y - e.y);
+          if (n) {
+            const step = groundVelocity(n, e.speed * dt);
+            tryMove(e, step.x, step.y, this.room);
+          }
         } else if (e.attackCd <= 0) {
           if (e.windupMax > 0) {
             e.winding = e.windupMax;
@@ -452,17 +461,24 @@ export class Game {
       } else if (e.type === 'ranged') {
         const d = dist(e, p);
         if (e.kb <= 0 && d < e.preferDist - 1) {
-          const n = normalize(e.x - p.x, e.y - p.y);
-          tryMove(e, n.x * e.speed * dt, n.y * e.speed * dt, this.room);
+          const n = groundDir(e.x - p.x, e.y - p.y);
+          if (n) {
+            const step = groundVelocity(n, e.speed * dt);
+            tryMove(e, step.x, step.y, this.room);
+          }
         } else if (e.kb <= 0 && d > e.preferDist + 1) {
-          const n = normalize(p.x - e.x, p.y - e.y);
-          tryMove(e, n.x * e.speed * 0.7 * dt, n.y * e.speed * 0.7 * dt, this.room);
+          const n = groundDir(p.x - e.x, p.y - e.y);
+          if (n) {
+            const step = groundVelocity(n, e.speed * 0.7 * dt);
+            tryMove(e, step.x, step.y, this.room);
+          }
         }
         if (e.attackCd <= 0 && d < 9) {
-          const n = normalize(p.x - e.x, p.y - e.y);
+          const n = groundDir(p.x - e.x, p.y - e.y) || { x: 1, y: 0 };
           const spd = e.shotSpeed || 5.5;
+          const vel = groundVelocity(n, spd);
           this.projectiles.push(
-            createProjectile(e.x, e.y, n.x * spd, n.y * spd, e.damage, 'enemy', '#d4a017', 2.2, 0.16, {
+            createProjectile(e.x, e.y, vel.x, vel.y, e.damage, 'enemy', '#d4a017', 2.2, 0.16, {
               name: e.name,
               en: e.en,
               kind: 'arrow',
@@ -486,8 +502,11 @@ export class Game {
     // Slowly drift toward player
     const d = dist(boss, p);
     if (d > 1.8) {
-      const n = normalize(p.x - boss.x, p.y - boss.y);
-      tryMove(boss, n.x * boss.speed * 0.7 * dt, n.y * boss.speed * 0.7 * dt, this.room);
+      const n = groundDir(p.x - boss.x, p.y - boss.y);
+      if (n) {
+        const step = groundVelocity(n, boss.speed * 0.7 * dt);
+        tryMove(boss, step.x, step.y, this.room);
+      }
     }
 
     if (boss.phaseTimer <= 0) {
@@ -498,11 +517,11 @@ export class Game {
         // Spear volley — 5 projectiles in fan
         const base = Math.atan2(p.y - boss.y, p.x - boss.x);
         for (let i = -2; i <= 2; i++) {
-          const a = base + i * 0.22;
+          const vel = groundVelocity(groundDirFromAngle(base + i * 0.22), 6);
           this.projectiles.push(
             createProjectile(
               boss.x, boss.y,
-              Math.cos(a) * 6, Math.sin(a) * 6,
+              vel.x, vel.y,
               1, 'enemy', '#c42b2b', 2.5, 0.2,
               { name: boss.name, en: boss.en, kind: 'spear', x: boss.x, y: boss.y }
             )
@@ -516,11 +535,11 @@ export class Game {
       } else {
         // Ring spears
         for (let i = 0; i < 10; i++) {
-          const a = (i / 10) * Math.PI * 2;
+          const vel = groundVelocity(groundDirFromAngle((i / 10) * Math.PI * 2), 4.5);
           this.projectiles.push(
             createProjectile(
               boss.x, boss.y,
-              Math.cos(a) * 4.5, Math.sin(a) * 4.5,
+              vel.x, vel.y,
               1, 'enemy', '#d4a017', 2.0, 0.18,
               { name: boss.name, en: boss.en, kind: 'ring', x: boss.x, y: boss.y }
             )
@@ -537,8 +556,11 @@ export class Game {
           damagePlayer(p, 1, this.vfx, this.hurtSource(boss, 'slam'), this.feel);
         }
         // Leap closer
-        const n = normalize(p.x - boss.x, p.y - boss.y);
-        tryMove(boss, n.x * 1.8, n.y * 1.8, this.room);
+        const n = groundDir(p.x - boss.x, p.y - boss.y);
+        if (n) {
+          const step = groundVelocity(n, 1.8);
+          tryMove(boss, step.x, step.y, this.room);
+        }
         this.vfx.push(createVfx('burst', boss.x, boss.y, 0.3, { color: '#c42b2b', r: 2.0 }));
       }
     }
