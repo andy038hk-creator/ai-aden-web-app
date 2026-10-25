@@ -9,3 +9,4 @@ Once GitHub Pages is published from GitHub Actions:
 
 - https://andy038hk-creator.github.io/ai-aden-web-app/
 - https://andy038hk-creator.github.io/ai-aden-web-app/chenxiang-roguelike/
+- [Pixel Office Agent Status Board](agent-status-board/README.md): https://andy038hk-creator.github.io/ai-aden-web-app/agent-status-board/status-board.html

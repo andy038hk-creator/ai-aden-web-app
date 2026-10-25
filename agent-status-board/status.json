@@ -1,0 +1,260 @@
+{
+  "updated_at": "2026-10-25T17:10:00+08:00",
+  "agents": [
+    {
+      "id": "langlang",
+      "name": "朗朗 - CEO",
+      "status": "working",
+      "task": "Keep board current · 對齊 live 進度",
+      "updated_at": "2026-10-25T17:10:00+08:00",
+      "lastActive": "2026-10-25T17:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          2,
+          3,
+          5,
+          4,
+          3,
+          1,
+          2
+        ],
+        "completedTotal": 20,
+        "activeDays": 7,
+        "workingMinutes": 420
+      }
+    },
+    {
+      "id": "mech",
+      "name": "MECH",
+      "status": "working",
+      "task": "Watch server health",
+      "updated_at": "2026-10-25T16:50:00+08:00",
+      "lastActive": "2026-10-25T16:50:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "completedTotal": 7,
+        "activeDays": 7,
+        "workingMinutes": 480
+      }
+    },
+    {
+      "id": "abu",
+      "name": "阿補",
+      "status": "working",
+      "task": "QA pass · 補測中",
+      "updated_at": "2026-10-25T17:05:00+08:00",
+      "lastActive": "2026-10-25T17:05:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          0,
+          1,
+          0,
+          2,
+          0,
+          4
+        ],
+        "completedTotal": 7,
+        "activeDays": 3,
+        "workingMinutes": 200
+      }
+    },
+    {
+      "id": "aying",
+      "name": "阿影",
+      "status": "completed",
+      "task": "《致富心態》16:9 pack 已交",
+      "updated_at": "2026-10-25T09:10:00+08:00",
+      "lastCompleted": "2026-10-25T09:10:00+08:00",
+      "lastActive": "2026-10-25T09:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          0,
+          0,
+          6,
+          3,
+          2,
+          0
+        ],
+        "completedTotal": 11,
+        "activeDays": 3,
+        "workingMinutes": 260
+      }
+    },
+    {
+      "id": "atom",
+      "name": "阿TOM",
+      "status": "completed",
+      "task": "Pixel Office board v1 已交 zip",
+      "updated_at": "2026-10-25T14:10:00+08:00",
+      "lastCompleted": "2026-10-25T14:10:00+08:00",
+      "lastActive": "2026-10-25T14:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          3,
+          2,
+          2,
+          1,
+          0,
+          0,
+          0
+        ],
+        "completedTotal": 8,
+        "activeDays": 4,
+        "workingMinutes": 190
+      }
+    },
+    {
+      "id": "aqing",
+      "name": "阿靚",
+      "status": "idle",
+      "task": "R1 完咗 · 等下個 brief",
+      "updated_at": "2026-10-23T05:10:00+08:00",
+      "lastActive": "2026-10-23T05:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "completedTotal": 2,
+        "activeDays": 2,
+        "workingMinutes": 80
+      }
+    },
+    {
+      "id": "ashu",
+      "name": "阿書",
+      "status": "idle",
+      "task": "Pilot cut ready · 暫無新工",
+      "updated_at": "2026-10-22T17:10:00+08:00",
+      "lastActive": "2026-10-22T17:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "completedTotal": 1,
+        "activeDays": 1,
+        "workingMinutes": 40
+      }
+    },
+    {
+      "id": "adai",
+      "name": "阿呆",
+      "status": "idle",
+      "task": "Standby",
+      "updated_at": "2026-10-23T17:10:00+08:00",
+      "lastActive": "2026-10-23T17:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "completedTotal": 2,
+        "activeDays": 1,
+        "workingMinutes": 70
+      }
+    },
+    {
+      "id": "fund",
+      "name": "Fund 佬",
+      "status": "idle",
+      "task": "Standby · 好耐冇工",
+      "updated_at": "2026-10-20T17:10:00+08:00",
+      "lastActive": "2026-10-20T17:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
+      }
+    },
+    {
+      "id": "shixiong",
+      "name": "師兄",
+      "status": "idle",
+      "task": "Standby",
+      "updated_at": "2026-10-19T17:10:00+08:00",
+      "lastActive": "2026-10-19T17:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "completedTotal": 1,
+        "activeDays": 1,
+        "workingMinutes": 25
+      }
+    },
+    {
+      "id": "hongzai",
+      "name": "弘仔",
+      "status": "idle",
+      "task": "Idle after deploy",
+      "updated_at": "2026-10-17T17:10:00+08:00",
+      "lastActive": "2026-10-17T17:10:00+08:00",
+      "week": {
+        "weekStart": "2026-10-20",
+        "completedByDay": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
+      }
+    }
+  ]
+}
