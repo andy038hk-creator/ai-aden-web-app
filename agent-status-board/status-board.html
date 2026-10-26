@@ -1028,7 +1028,7 @@ function render(data) {
 
 function updateSourceNote() {
   const el=document.getElementById("source-note");
-  if (dataSource==="fetch"){ el.className="source-note ok"; el.textContent="來源：status.json（每 5 秒刷新）"; }
+  if (dataSource==="fetch"){ el.className="source-note ok"; el.textContent="來源：status.json（每 5 分鐘刷新）"; }
   else if (dataSource==="file"){ el.className="source-note ok"; el.textContent="來源：已用 Load JSON 載入（本地檔）"; }
   else if (dataSource==="embedded"){ el.className="source-note warn"; el.textContent="fetch 失敗 → 用內嵌 sample。可按 Load JSON 載入 status.json"; }
   else { el.className="source-note warn"; el.textContent="等待狀態資料中..."; }
@@ -1052,7 +1052,7 @@ async function loadInitial() {
     if (dataSource==="file") return;
     const ok2=await tryFetch();
     if (!ok2 && dataSource==="fetch"){ dataSource="embedded"; updateSourceNote(); }
-  }, 5000);
+  }, 300000);
 }
 
 document.getElementById("file-input").addEventListener("change", function (ev) {
