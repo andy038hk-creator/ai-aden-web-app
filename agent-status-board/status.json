@@ -22,6 +22,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 20
       }
     },
     {
@@ -45,6 +49,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 7
       }
     },
     {
@@ -68,6 +76,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 7
       }
     },
     {
@@ -92,6 +104,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 11
       }
     },
     {
@@ -116,6 +132,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 8
       }
     },
     {
@@ -139,6 +159,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 2
       }
     },
     {
@@ -162,6 +186,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 1
       }
     },
     {
@@ -185,6 +213,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 2
       }
     },
     {
@@ -208,6 +240,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 0
       }
     },
     {
@@ -231,6 +267,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 1
       }
     },
     {
@@ -254,6 +294,10 @@
         "completedTotal": 0,
         "activeDays": 0,
         "workingMinutes": 0
+      },
+      "month": {
+        "monthStart": "2026-10-01",
+        "completedTotal": 0
       }
     }
   ]
