@@ -9,19 +9,19 @@
       "updated_at": "2026-10-25T17:10:00+08:00",
       "lastActive": "2026-10-25T17:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
-          2,
-          3,
-          5,
-          4,
-          3,
-          1,
-          2
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
         ],
-        "completedTotal": 20,
-        "activeDays": 7,
-        "workingMinutes": 420
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -32,19 +32,19 @@
       "updated_at": "2026-10-25T16:50:00+08:00",
       "lastActive": "2026-10-25T16:50:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
         ],
-        "completedTotal": 7,
-        "activeDays": 7,
-        "workingMinutes": 480
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -55,19 +55,19 @@
       "updated_at": "2026-10-25T17:05:00+08:00",
       "lastActive": "2026-10-25T17:05:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,
-          1,
           0,
-          2,
           0,
-          4
+          0,
+          0,
+          0
         ],
-        "completedTotal": 7,
-        "activeDays": 3,
-        "workingMinutes": 200
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -79,19 +79,19 @@
       "lastCompleted": "2026-10-25T09:10:00+08:00",
       "lastActive": "2026-10-25T09:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,
           0,
-          6,
-          3,
-          2,
+          0,
+          0,
+          0,
           0
         ],
-        "completedTotal": 11,
-        "activeDays": 3,
-        "workingMinutes": 260
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -103,19 +103,19 @@
       "lastCompleted": "2026-10-25T14:10:00+08:00",
       "lastActive": "2026-10-25T14:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
-          3,
-          2,
-          2,
-          1,
+          0,
+          0,
+          0,
+          0,
           0,
           0,
           0
         ],
-        "completedTotal": 8,
-        "activeDays": 4,
-        "workingMinutes": 190
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -126,19 +126,19 @@
       "updated_at": "2026-10-23T05:10:00+08:00",
       "lastActive": "2026-10-23T05:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
-          1,
           0,
-          1,
+          0,
+          0,
           0,
           0,
           0
         ],
-        "completedTotal": 2,
-        "activeDays": 2,
-        "workingMinutes": 80
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -149,9 +149,9 @@
       "updated_at": "2026-10-22T17:10:00+08:00",
       "lastActive": "2026-10-22T17:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
-          1,
+          0,
           0,
           0,
           0,
@@ -159,9 +159,9 @@
           0,
           0
         ],
-        "completedTotal": 1,
-        "activeDays": 1,
-        "workingMinutes": 40
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -172,19 +172,19 @@
       "updated_at": "2026-10-23T17:10:00+08:00",
       "lastActive": "2026-10-23T17:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,
-          2,
+          0,
           0,
           0,
           0,
           0
         ],
-        "completedTotal": 2,
-        "activeDays": 1,
-        "workingMinutes": 70
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -195,7 +195,7 @@
       "updated_at": "2026-10-20T17:10:00+08:00",
       "lastActive": "2026-10-20T17:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,
@@ -218,19 +218,19 @@
       "updated_at": "2026-10-19T17:10:00+08:00",
       "lastActive": "2026-10-19T17:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,
           0,
           0,
           0,
-          1,
+          0,
           0
         ],
-        "completedTotal": 1,
-        "activeDays": 1,
-        "workingMinutes": 25
+        "completedTotal": 0,
+        "activeDays": 0,
+        "workingMinutes": 0
       }
     },
     {
@@ -241,7 +241,7 @@
       "updated_at": "2026-10-17T17:10:00+08:00",
       "lastActive": "2026-10-17T17:10:00+08:00",
       "week": {
-        "weekStart": "2026-10-20",
+        "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,

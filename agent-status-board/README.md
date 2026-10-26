@@ -26,3 +26,5 @@ https://andy038hk-creator.github.io/ai-aden-web-app/agent-status-board/
 ## Updating live data
 
 The board polls `status.json` every 5 seconds over HTTPS (`cache: "no-store"`). Commit an updated `status.json` to `main`; once Pages republishes, open boards pick up the new file on the next poll. If that fetch fails, the page keeps showing the sample embedded in `status-board.html`.
+
+Weekly completion counts reset every Monday 00:00 Asia/Hong_Kong. A `week.weekStart` that is missing or not this Monday (`YYYY-MM-DD`) is ignored, and the desk bars, totals, and 本週工作量排行 show zero.
