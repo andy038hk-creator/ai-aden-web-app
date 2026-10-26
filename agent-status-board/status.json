@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-25T17:10:00+08:00",
+  "updated_at": "2026-10-26T11:50:58+08:00",
   "agents": [
     {
       "id": "langlang",
       "name": "朗朗 - CEO",
       "status": "working",
-      "task": "Keep board current · 對齊 live 進度",
-      "updated_at": "2026-10-25T17:10:00+08:00",
-      "lastActive": "2026-10-25T17:10:00+08:00",
+      "task": "Team status rollup · board live sync",
+      "updated_at": "2026-10-26T11:50:58+08:00",
+      "lastActive": "2026-10-26T11:50:58+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
@@ -20,8 +20,8 @@
           0
         ],
         "completedTotal": 0,
-        "activeDays": 0,
-        "workingMinutes": 0
+        "activeDays": 1,
+        "workingMinutes": 30
       },
       "month": {
         "monthStart": "2026-10-01",
@@ -31,8 +31,8 @@
     {
       "id": "mech",
       "name": "MECH",
-      "status": "working",
-      "task": "Watch server health",
+      "status": "idle",
+      "task": "Standby · no open brief",
       "updated_at": "2026-10-25T16:50:00+08:00",
       "lastActive": "2026-10-25T16:50:00+08:00",
       "week": {
@@ -58,8 +58,8 @@
     {
       "id": "abu",
       "name": "阿補",
-      "status": "working",
-      "task": "QA pass · 補測中",
+      "status": "idle",
+      "task": "Standby · PT tutor search paused",
       "updated_at": "2026-10-25T17:05:00+08:00",
       "lastActive": "2026-10-25T17:05:00+08:00",
       "week": {
@@ -86,9 +86,8 @@
       "id": "aying",
       "name": "阿影",
       "status": "completed",
-      "task": "《致富心態》16:9 pack 已交",
+      "task": "《致富心態》pack 已交",
       "updated_at": "2026-10-25T09:10:00+08:00",
-      "lastCompleted": "2026-10-25T09:10:00+08:00",
       "lastActive": "2026-10-25T09:10:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -108,16 +107,16 @@
       "month": {
         "monthStart": "2026-10-01",
         "completedTotal": 11
-      }
+      },
+      "lastCompleted": "2026-10-25T09:10:00+08:00"
     },
     {
       "id": "atom",
       "name": "阿TOM",
-      "status": "completed",
-      "task": "Pixel Office board v1 已交 zip",
-      "updated_at": "2026-10-25T14:10:00+08:00",
-      "lastCompleted": "2026-10-25T14:10:00+08:00",
-      "lastActive": "2026-10-25T14:10:00+08:00",
+      "status": "working",
+      "task": "Status board live sync + poll interval PR",
+      "updated_at": "2026-10-26T11:50:58+08:00",
+      "lastActive": "2026-10-26T11:50:58+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
@@ -130,8 +129,8 @@
           0
         ],
         "completedTotal": 0,
-        "activeDays": 0,
-        "workingMinutes": 0
+        "activeDays": 1,
+        "workingMinutes": 30
       },
       "month": {
         "monthStart": "2026-10-01",
@@ -142,7 +141,7 @@
       "id": "aqing",
       "name": "阿靚",
       "status": "idle",
-      "task": "R1 完咗 · 等下個 brief",
+      "task": "等下個 Shorts brief",
       "updated_at": "2026-10-23T05:10:00+08:00",
       "lastActive": "2026-10-23T05:10:00+08:00",
       "week": {
@@ -169,7 +168,7 @@
       "id": "ashu",
       "name": "阿書",
       "status": "idle",
-      "task": "Pilot cut ready · 暫無新工",
+      "task": "Pilot ready · 暫無新工",
       "updated_at": "2026-10-22T17:10:00+08:00",
       "lastActive": "2026-10-22T17:10:00+08:00",
       "week": {
@@ -222,7 +221,7 @@
     {
       "id": "fund",
       "name": "Fund 佬",
-      "status": "idle",
+      "status": "bored",
       "task": "Standby · 好耐冇工",
       "updated_at": "2026-10-20T17:10:00+08:00",
       "lastActive": "2026-10-20T17:10:00+08:00",
@@ -249,7 +248,7 @@
     {
       "id": "shixiong",
       "name": "師兄",
-      "status": "idle",
+      "status": "bored",
       "task": "Standby",
       "updated_at": "2026-10-19T17:10:00+08:00",
       "lastActive": "2026-10-19T17:10:00+08:00",
@@ -276,7 +275,7 @@
     {
       "id": "hongzai",
       "name": "弘仔",
-      "status": "idle",
+      "status": "bored",
       "task": "Idle after deploy",
       "updated_at": "2026-10-17T17:10:00+08:00",
       "lastActive": "2026-10-17T17:10:00+08:00",
