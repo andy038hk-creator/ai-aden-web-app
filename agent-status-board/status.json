@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-27T08:02:38+08:00",
+  "updated_at": "2026-10-27T12:11:01+08:00",
   "agents": [
     {
       "id": "langlang",
       "name": "朗朗 - CEO",
       "status": "idle",
       "task": "CTR 快照已備；等 Aden 回覆",
-      "updated_at": "2026-10-27T08:02:38+08:00",
-      "lastActive": "2026-10-27T07:47:30+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
+      "lastActive": "2026-10-27T11:12:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
@@ -21,7 +21,7 @@
         ],
         "completedTotal": 0,
         "activeDays": 2,
-        "workingMinutes": 35
+        "workingMinutes": 40
       },
       "month": {
         "monthStart": "2026-10-01",
@@ -33,7 +33,7 @@
       "name": "MECH",
       "status": "idle",
       "task": "待命",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -60,7 +60,7 @@
       "name": "阿補",
       "status": "idle",
       "task": "待命（weekday job digest）",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -87,7 +87,7 @@
       "name": "阿影",
       "status": "idle",
       "task": "待命（Pilot visual pack 已交）",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -113,9 +113,9 @@
       "id": "atom",
       "name": "阿TOM",
       "status": "working",
-      "task": "Status Board 08:00 HKT 4h sync · 推 live JSON",
-      "updated_at": "2026-10-27T08:02:38+08:00",
-      "lastActive": "2026-10-27T08:02:38+08:00",
+      "task": "Status Board 12:00 HKT 4h sync · 推 live JSON",
+      "updated_at": "2026-10-27T12:11:01+08:00",
+      "lastActive": "2026-10-27T12:11:01+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
@@ -129,7 +129,7 @@
         ],
         "completedTotal": 0,
         "activeDays": 2,
-        "workingMinutes": 90
+        "workingMinutes": 105
       },
       "month": {
         "monthStart": "2026-10-01",
@@ -141,7 +141,7 @@
       "name": "阿靚",
       "status": "idle",
       "task": "R2 hold；等 C2 48h＋Aden CONFIRM",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -168,7 +168,7 @@
       "name": "阿書",
       "status": "completed",
       "task": "Pilot v4a 分鏡 r3 完成；等 Aden CONFIRM／assemble",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T19:06:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -195,7 +195,7 @@
       "name": "阿呆",
       "status": "idle",
       "task": "待命",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -222,7 +222,7 @@
       "name": "Fund 佬",
       "status": "bored",
       "task": "好耐冇工 · bored",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -249,7 +249,7 @@
       "name": "師兄",
       "status": "bored",
       "task": "Standby · bored",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -276,7 +276,7 @@
       "name": "弘仔",
       "status": "bored",
       "task": "Idle after deploy · bored",
-      "updated_at": "2026-10-27T08:02:38+08:00",
+      "updated_at": "2026-10-27T12:11:01+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
