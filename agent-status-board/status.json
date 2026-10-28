@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-28T08:05:11+08:00",
+  "updated_at": "2026-10-28T12:04:06+08:00",
   "agents": [
     {
       "id": "langlang",
       "name": "朗朗 - CEO",
       "status": "idle",
-      "task": "CTR 快照已備；等 Aden 回覆",
-      "updated_at": "2026-10-28T08:05:11+08:00",
-      "lastActive": "2026-10-27T11:12:00+08:00",
+      "task": "晨間 CTR／strategy 已備；等 Aden／今晚 B1",
+      "updated_at": "2026-10-28T12:04:06+08:00",
+      "lastActive": "2026-10-28T10:05:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
@@ -20,8 +20,8 @@
           0
         ],
         "completedTotal": 0,
-        "activeDays": 2,
-        "workingMinutes": 40
+        "activeDays": 3,
+        "workingMinutes": 70
       },
       "month": {
         "monthStart": "2026-10-01",
@@ -33,7 +33,7 @@
       "name": "MECH",
       "status": "idle",
       "task": "待命",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -60,7 +60,7 @@
       "name": "阿補",
       "status": "idle",
       "task": "待命（weekday job digest）",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -85,37 +85,37 @@
     {
       "id": "aying",
       "name": "阿影",
-      "status": "idle",
-      "task": "待命（Pilot visual pack 已交）",
-      "updated_at": "2026-10-28T08:05:11+08:00",
-      "lastActive": "2026-10-26T11:51:45+08:00",
+      "status": "completed",
+      "task": "Opener research 10/28 NOTES／frames 已交",
+      "updated_at": "2026-10-28T12:04:06+08:00",
+      "lastActive": "2026-10-28T10:03:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
           0,
           0,
-          0,
+          1,
           0,
           0,
           0,
           0
         ],
-        "completedTotal": 0,
-        "activeDays": 0,
-        "workingMinutes": 0
+        "completedTotal": 1,
+        "activeDays": 1,
+        "workingMinutes": 45
       },
       "month": {
         "monthStart": "2026-10-01",
-        "completedTotal": 11
+        "completedTotal": 12
       }
     },
     {
       "id": "atom",
       "name": "阿TOM",
       "status": "working",
-      "task": "Status Board 08:00 HKT 4h sync · 推 live JSON",
-      "updated_at": "2026-10-28T08:05:11+08:00",
-      "lastActive": "2026-10-28T08:05:11+08:00",
+      "task": "Status Board 12:00 HKT 4h sync · 推 live JSON",
+      "updated_at": "2026-10-28T12:04:06+08:00",
+      "lastActive": "2026-10-28T12:04:06+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
@@ -129,7 +129,7 @@
         ],
         "completedTotal": 0,
         "activeDays": 3,
-        "workingMinutes": 155
+        "workingMinutes": 170
       },
       "month": {
         "monthStart": "2026-10-01",
@@ -140,8 +140,8 @@
       "id": "aqing",
       "name": "阿靚",
       "status": "idle",
-      "task": "R2 hold；等 C2 48h＋Aden CONFIRM",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "task": "R2-B1 今晚 21:00；A1 等 48h（Thu 21:00）",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -166,28 +166,28 @@
     {
       "id": "ashu",
       "name": "阿書",
-      "status": "working",
-      "task": "Pilot 結尾卡／重溫四點 visual；等 Aden CONFIRM／assemble",
-      "updated_at": "2026-10-28T08:05:11+08:00",
-      "lastActive": "2026-10-28T06:24:07+08:00",
+      "status": "completed",
+      "task": "Pilot v4a Ch1+2 Felix VO ready；等 Aden CONFIRM／assemble",
+      "updated_at": "2026-10-28T12:04:06+08:00",
+      "lastActive": "2026-10-28T09:41:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
         "completedByDay": [
           1,
           0,
-          0,
+          1,
           0,
           0,
           0,
           0
         ],
-        "completedTotal": 1,
-        "activeDays": 2,
-        "workingMinutes": 50
+        "completedTotal": 2,
+        "activeDays": 3,
+        "workingMinutes": 90
       },
       "month": {
         "monthStart": "2026-10-01",
-        "completedTotal": 2
+        "completedTotal": 3
       }
     },
     {
@@ -195,7 +195,7 @@
       "name": "阿呆",
       "status": "idle",
       "task": "待命",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -222,7 +222,7 @@
       "name": "Fund 佬",
       "status": "bored",
       "task": "好耐冇工 · bored",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -249,7 +249,7 @@
       "name": "師兄",
       "status": "bored",
       "task": "Standby · bored",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-10-26",
@@ -276,7 +276,7 @@
       "name": "弘仔",
       "status": "idle",
       "task": "F3 Unit 1 lesson-flow／quiz 修訂暫歇；等下一輪",
-      "updated_at": "2026-10-28T08:05:11+08:00",
+      "updated_at": "2026-10-28T12:04:06+08:00",
       "lastActive": "2026-10-27T17:15:00+08:00",
       "week": {
         "weekStart": "2026-10-26",
