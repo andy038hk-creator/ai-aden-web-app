@@ -1,12 +1,11 @@
 {
-  "updated_at": "2026-11-09T12:11:13+08:00",
+  "updated_at": "2026-11-09T16:05:13+08:00",
   "agents": [
     {
       "id": "langlang",
       "name": "朗朗 - CEO",
       "status": "idle",
       "task": "MOTION_V1 審片上輪週五晚；等下一輪",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-11-06T19:29:00+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -26,14 +25,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 1
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "mech",
       "name": "MECH",
       "status": "idle",
       "task": "待命",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -53,14 +52,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "abu",
       "name": "阿補",
       "status": "idle",
       "task": "Weekday job digest 待命",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -80,14 +79,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "aying",
       "name": "阿影",
       "status": "idle",
       "task": "MOTION_V1 visual pack／assets 上輪週五晚；等下一輪",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-11-06T19:07:00+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -107,15 +106,15 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "atom",
       "name": "阿TOM",
       "status": "working",
-      "task": "Status Board 12:00 HKT 4h sync",
-      "updated_at": "2026-11-09T12:11:13+08:00",
-      "lastActive": "2026-11-09T12:11:13+08:00",
+      "task": "Status Board 16:00 HKT 4h sync",
+      "lastActive": "2026-11-09T16:05:13+08:00",
       "week": {
         "weekStart": "2026-11-09",
         "completedByDay": [
@@ -129,19 +128,19 @@
         ],
         "completedTotal": 0,
         "activeDays": 1,
-        "workingMinutes": 4
+        "workingMinutes": 8
       },
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "aqing",
       "name": "阿靚",
       "status": "idle",
       "task": "Short／MOTION_V1 assemble 上輪週五晚；等下一輪",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-11-06T19:11:00+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -161,14 +160,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "ashu",
       "name": "阿書",
       "status": "completed",
       "task": "Ch3–4 Felix VO credits 計劃已交；等 Aden CONFIRM 再生",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-11-02T15:01:00+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -188,14 +187,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "adai",
       "name": "阿呆",
       "status": "idle",
       "task": "待命",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -215,14 +214,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "fund",
       "name": "Fund 佬",
       "status": "bored",
       "task": "好耐冇工 · bored",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -242,14 +241,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "shixiong",
       "name": "師兄",
       "status": "bored",
       "task": "Standby - bored",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-10-26T11:51:45+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -269,14 +268,14 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     },
     {
       "id": "hongzai",
       "name": "弘仔",
       "status": "completed",
       "task": "F4／F5 Unit 1 plan＋Notes／Answers／Quizzes 已交；等 AI／Aden review",
-      "updated_at": "2026-11-09T12:11:13+08:00",
       "lastActive": "2026-10-31T23:00:00+08:00",
       "week": {
         "weekStart": "2026-11-09",
@@ -296,7 +295,8 @@
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
-      }
+      },
+      "updated_at": "2026-11-09T16:05:13+08:00"
     }
   ]
 }
