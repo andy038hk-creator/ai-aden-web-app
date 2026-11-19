@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-19T09:23:15+08:00",
+  "updated_at": "2026-11-19T14:26:50+08:00",
   "agents": [
     {
       "id": "langlang",
@@ -26,7 +26,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 1
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "mech",
@@ -53,7 +53,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "abu",
@@ -80,41 +80,41 @@
         "monthStart": "2026-11-01",
         "completedTotal": 1
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "aying",
       "name": "阿影",
       "status": "completed",
-      "task": "11/18 Related Long C2 16x9 visual pack 已交（阿靚已用來組 v1）",
-      "lastActive": "2026-11-18T10:41:00+08:00",
+      "task": "11/19 opener research NOTES 已交（T1 QA／later R5+）",
+      "lastActive": "2026-11-19T09:24:00+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
           1,
           1,
           2,
-          0,
+          1,
           0,
           0,
           0
         ],
-        "completedTotal": 4,
-        "activeDays": 3,
+        "completedTotal": 5,
+        "activeDays": 4,
         "workingMinutes": 0
       },
       "month": {
         "monthStart": "2026-11-01",
-        "completedTotal": 7
+        "completedTotal": 8
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "atom",
       "name": "阿TOM",
       "status": "working",
-      "task": "Status Board 09:00 HKT sync",
-      "lastActive": "2026-11-19T09:23:15+08:00",
+      "task": "Status Board 14:00 HKT sync",
+      "lastActive": "2026-11-19T14:26:50+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
@@ -128,13 +128,13 @@
         ],
         "completedTotal": 0,
         "activeDays": 4,
-        "workingMinutes": 29
+        "workingMinutes": 33
       },
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "aqing",
@@ -161,7 +161,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 11
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "ashu",
@@ -188,7 +188,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "adai",
@@ -215,7 +215,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "fund",
@@ -242,7 +242,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 8
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "shixiong",
@@ -269,7 +269,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     },
     {
       "id": "hongzai",
@@ -296,7 +296,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 3
       },
-      "updated_at": "2026-11-19T09:23:15+08:00"
+      "updated_at": "2026-11-19T14:26:50+08:00"
     }
   ]
 }
