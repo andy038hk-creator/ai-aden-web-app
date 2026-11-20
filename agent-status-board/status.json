@@ -1,32 +1,32 @@
 {
-  "updated_at": "2026-11-19T14:26:50+08:00",
+  "updated_at": "2026-11-20T09:20:00+08:00",
   "agents": [
     {
       "id": "langlang",
       "name": "朗朗 - CEO",
-      "status": "idle",
-      "task": "MOTION_V1 審片上輪週五晚；等下一輪",
-      "lastActive": "2026-11-06T19:29:00+08:00",
+      "status": "completed",
+      "task": "Standing Brief + 隊列規則已鎖定；粵語講書畫面計劃 v1 等 Aden REVIEW",
+      "lastActive": "2026-11-19T17:35:00+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
           0,
           0,
           0,
-          0,
+          1,
           0,
           0,
           0
         ],
-        "completedTotal": 0,
-        "activeDays": 0,
+        "completedTotal": 1,
+        "activeDays": 1,
         "workingMinutes": 0
       },
       "month": {
         "monthStart": "2026-11-01",
-        "completedTotal": 1
+        "completedTotal": 2
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "mech",
@@ -53,7 +53,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "abu",
@@ -80,7 +80,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 1
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "aying",
@@ -107,14 +107,14 @@
         "monthStart": "2026-11-01",
         "completedTotal": 8
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "atom",
       "name": "阿TOM",
       "status": "working",
-      "task": "Status Board 14:00 HKT sync",
-      "lastActive": "2026-11-19T14:26:50+08:00",
+      "task": "Status Board 09:00 HKT sync",
+      "lastActive": "2026-11-20T09:20:00+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
@@ -127,68 +127,68 @@
           0
         ],
         "completedTotal": 0,
-        "activeDays": 4,
-        "workingMinutes": 33
+        "activeDays": 5,
+        "workingMinutes": 37
       },
       "month": {
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "aqing",
       "name": "阿靚",
       "status": "completed",
-      "task": "11/19 7am YT review 已交；R4-C2 已上架（有 pulse，等 pin CONFIRM）；C1 今晚 21:00 48h lock；C3 今晚 21:00；Related Long v1 等 cut CONFIRM",
-      "lastActive": "2026-11-19T07:09:00+08:00",
+      "task": "11/20 7am YT review 已交；R4-C3 已上架並已補 pin；C2 今晚 21:00 48h lock；R4-T 今晚 21:00；Related Long 已公開；R5 11/22–26 已排期",
+      "lastActive": "2026-11-20T07:21:00+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
           1,
           1,
           2,
+          3,
           1,
-          0,
           0,
           0
         ],
-        "completedTotal": 5,
-        "activeDays": 4,
+        "completedTotal": 8,
+        "activeDays": 5,
         "workingMinutes": 0
       },
       "month": {
         "monthStart": "2026-11-01",
-        "completedTotal": 11
+        "completedTotal": 14
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "ashu",
       "name": "阿書",
       "status": "completed",
-      "task": "Ch3–4 Felix VO credits 計劃已交；等 Aden CONFIRM 再生",
-      "lastActive": "2026-11-02T15:01:00+08:00",
+      "task": "《致富心態》畫面計劃 v1 已交；等 Aden REVIEW（未批准前唔 gen／唔剪）",
+      "lastActive": "2026-11-19T17:34:00+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
           0,
           0,
           0,
-          0,
+          1,
           0,
           0,
           0
         ],
-        "completedTotal": 0,
-        "activeDays": 0,
+        "completedTotal": 1,
+        "activeDays": 1,
         "workingMinutes": 0
       },
       "month": {
         "monthStart": "2026-11-01",
-        "completedTotal": 0
+        "completedTotal": 1
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "adai",
@@ -215,34 +215,34 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "fund",
       "name": "Fund 佬",
       "status": "completed",
-      "task": "11/18 paper trade 已記：冇訊號持幣；11/19 早市簡報未見；等今晚 paper trade",
-      "lastActive": "2026-11-18T22:41:00+08:00",
+      "task": "11/19 paper trade 已記：冇訊號持幣；11/20 早市簡報未見；等今晚 paper trade",
+      "lastActive": "2026-11-19T22:41:00+08:00",
       "week": {
         "weekStart": "2026-11-16",
         "completedByDay": [
           1,
           1,
           1,
-          0,
+          1,
           0,
           0,
           0
         ],
-        "completedTotal": 3,
-        "activeDays": 3,
+        "completedTotal": 4,
+        "activeDays": 4,
         "workingMinutes": 0
       },
       "month": {
         "monthStart": "2026-11-01",
-        "completedTotal": 8
+        "completedTotal": 9
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "shixiong",
@@ -269,7 +269,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 0
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     },
     {
       "id": "hongzai",
@@ -296,7 +296,7 @@
         "monthStart": "2026-11-01",
         "completedTotal": 3
       },
-      "updated_at": "2026-11-19T14:26:50+08:00"
+      "updated_at": "2026-11-20T09:20:00+08:00"
     }
   ]
 }
